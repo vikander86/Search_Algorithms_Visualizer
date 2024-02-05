@@ -5,13 +5,14 @@ from python_files.containers import Stack, Prio_queue, Queue
 
 # node class, that holds information about the state, its  
 class Node:
-    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0):
+    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0,action=set()):
         self.state = state
         self.gx = goal_cost
         self.hx = heuristic_cost
         self.parent = parent
         self.depth = depth
         self.explored = explored
+        self.action = action
         
     def __repr__(self):
         return f"{self.state}, Goal:{self.gx}, Heuristic:{self.hx}, Parent:{self.parent}"
@@ -69,6 +70,17 @@ class Problem:
             final_state = final_state.parent
         path.reverse()
         return path
+    
+    def reverse_actions(self, final_state):
+        """ 
+        Return list with actions from initial state to goal state
+        """
+        actions = []
+        while final_state:
+            actions.append(final_state.action)
+            final_state = final_state.parent
+        actions.reverse()
+        return actions
 
 
 
@@ -214,13 +226,17 @@ class EightProblem(Problem):
         Return the list of actions that can be executed in the given state.
         """
         possible_actions = [] # init empty set
-        moves = ((1,0),(0,1),(-1,0),(0,-1))
+        moves = {(1,0):"Right",
+                 (0,1):"Down",
+                 (-1,0):"Left",
+                 (0,-1):"Up"}
         x,y = self.find_zero(state)
         
-        for dx,dy in moves:
+        for move, action in moves.items():
+            dy,dx = move
             new_x, new_y = x+dx, y+dy
             if self.is_valid_move(new_x,new_y):
-                possible_actions.append((new_x,new_y))
+                possible_actions.append((new_x,new_y, action))
                 
         return possible_actions
     
@@ -228,11 +244,11 @@ class EightProblem(Problem):
         """
         Return the state that results from executing the given action in the given state.
         """
-        x, y = self.find_zero(state)
+        x, y, action_description = action 
+        zero_x, zero_y = self.find_zero(state)
         new_state = copy.deepcopy(state)
-        new_x, new_y = action
-        new_state[x][y], new_state[new_x][new_y] = new_state[new_x][new_y], new_state[x][y]
-        return new_state
+        new_state[zero_x][zero_y], new_state[x][y] = new_state[x][y], new_state[zero_x][zero_y]
+        return new_state, action_description
     
     def heuristic(self, state):
         """ 
@@ -268,11 +284,11 @@ class Search_Algorithms:
                 # return self.problem.reverse_steps(current_node)
             
             for action in self.problem.actions(current_node.state):
-                new_state = self.problem.result(current_node.state, action)
+                new_state, action_description = self.problem.result(current_node.state, action)
                 if tuple(map(tuple, new_state)) not in visited:
                     g_cost = current_node.gx + 1 if cost else 0
                     h_cost = self.problem.heuristic(new_state) if heuristic else 0
-                    new_node = Node(new_state, g_cost, h_cost, current_node)
+                    new_node = Node(state=new_state, goal_cost=g_cost, heuristic_cost=h_cost, parent=current_node, action=action_description)
                     frontier.enqueue(new_node)
                     visited.add(tuple(map(tuple, new_state)))
     

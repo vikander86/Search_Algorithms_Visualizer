@@ -25,7 +25,6 @@ class GUI(CTk):
         self.grid_rowconfigure(4,weight=2, uniform="a")
         self.grid_rowconfigure((1,2,3),weight=3, uniform="a")
         
-        
         """
         Frame work for window
         """
@@ -150,9 +149,11 @@ class GUI(CTk):
         self.goal_state_text = CTkLabel(self.goal_frame, text="Goal State", fg_color="transparent", font=("Consolas", 14))
         self.goal_state_text.grid(row=0, column=0, sticky="nwe", padx=5, pady=5)
         
-        self.solution_text = CTkLabel(self.solution_frame, text="Solution", fg_color="transparent", font=("Consolas", 14))
-        self.solution_text.grid(row=0, column=0, padx=5,pady=5, sticky="nwe")
+        self.solution_banner = CTkLabel(self.solution_frame, text="Solution", fg_color="transparent", font=("Consolas", 14))
+        self.solution_banner.grid(row=0, column=0, padx=5,pady=5, sticky="nwe")
         
+        self.solution_text = CTkLabel(self.solution_frame, text="", fg_color="transparent", font=("Consolas", 20))
+        self.solution_text.grid(row=2, column=0, padx=5,pady=5, sticky="nwe")
         
 
     def button_exit(self):
@@ -191,50 +192,52 @@ class GUI(CTk):
                 entry.configure(validate="none")
                 entry.delete(0,"end")
                 entry.configure(validate="all")
-    
-    def size_update(self, tile):
-        pass
-        
-    
-    def update_state_eightpuzzle(self, solution, step_index=0):
+
+    def update_state_eightpuzzle(self, solution, actions, step_index=0):
         if step_index >=len(solution):
             return
 
+        time = 1000 if self.selected_algorithm.get() != "DFS_algorithm" else 1
         step = solution[step_index]
-        print(step)
+        action = actions[step_index + 1]
+
         for i, row in enumerate(self.solution_representation):
             for j, column in enumerate(row):
-                if step[i][j] == 0:
-                    column.configure(text=f"")
-                else:
-                    column.configure(text=f"{step[i][j]}")
-        
-        self.after(500, lambda : self.update_state_eightpuzzle(solution, step_index+1))
-    
+                column.configure(text=f"{step[i][j]}" if step[i][j] != 0 else "")
+                if step_index != len(action):
+                    self.solution_text.configure(text=f"{action}")
+
+      
+        self.after(time, lambda : self.update_state_eightpuzzle(solution, actions, step_index+1))
     
     def solve_eightpuzzle(self):
-            array = []
-            for row in self.entries:
-                row_list = []
-                for column in row:
-                    number = column.get()
-                    row_list.append(int(number))
-                array.append(row_list)
-            problem = EightProblem(array)
-            solver = Search_Algorithms(problem)
+        array = []
+        for row in self.entries:
+            row_list = []
+            for column in row:
+                number = column.get()
+                row_list.append(int(number))
+            array.append(row_list)
             
-            get_algorithm = self.selected_algorithm.get()
-            assign_algorithm = getattr(solver, get_algorithm, None)
             
-            result = assign_algorithm()
-            solution = problem.reverse_steps(result)
-            
-            # 3 5 7 8 1 2 6 4 0
-            self.update_state_eightpuzzle(solution, 0)
-            
-            self.after(10, lambda: self.path_cost_label.configure(text=f"Path Length: {len(solution)}"))
-            self.after(10, lambda: self.explored_label.configure(text=f"Nodes Explored: {result.explored}"))
-            self.after(10, lambda: self.solution_text.configure(text=f"Solution\n\n{get_algorithm}"))
+        problem = EightProblem(array)
+        solver = Search_Algorithms(problem)
+
+        get_algorithm = self.selected_algorithm.get()
+        assign_algorithm = getattr(solver, get_algorithm, None)
+        
+        result = assign_algorithm()
+        solution = problem.reverse_steps(result)
+        actions = problem.reverse_actions(result)
+        actions.append("SUCCESS")
+
+        self.update_state_eightpuzzle(solution, actions, 0)
+        
+        self.after(10, lambda: self.path_cost_label.configure(text=f"Path Length: {len(solution)}"))
+        self.after(10, lambda: self.explored_label.configure(text=f"Nodes Explored: {result.explored}"))
+        self.after(10, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
+        
+
             
                     
             
@@ -308,15 +311,6 @@ class GUI(CTk):
                 row_entries.append(goal_tile)
             self.goal_representation.append(row_entries)
             
-        def entry_puzzle_state(self):
-            puzzle_state = []
-            for row_entry in self.entries:
-                row_state = []
-                for entry in row_entry:
-                    value = entry.get()
-                    row_state.append(value)
-                row_state.append(puzzle_state)
-        
         """
         SOLUTION FRAME
         """      
