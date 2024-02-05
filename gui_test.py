@@ -40,10 +40,9 @@ class GUI(CTk):
         left_frame.grid_columnconfigure(0, weight=1, uniform="a")
         
         result_frame = CTkFrame(self,corner_radius=50)
-        result_frame.grid(row = 4, column=1, columnspan=4, padx= 10, pady=(5,5), sticky="nswe")
+        result_frame.grid(row = 4, column=1, columnspan=4, padx= 5, pady=(5,5), sticky="nswe")
         result_frame.grid_rowconfigure(0, weight=1, uniform="a")
         result_frame.grid_columnconfigure((0,1,2,3), weight=3, uniform="a")
-        result_frame.grid_columnconfigure(4, weight=2, uniform="a")
         
         display_frame = CTkFrame(self, corner_radius=5, fg_color="transparent")
         display_frame.grid(row = 1, column=1, rowspan=3, columnspan=4, padx=5, pady=5, sticky="nswe")
@@ -94,14 +93,14 @@ class GUI(CTk):
         """
         
         # Variable to store radio button press
-        self.selected_algorithm = StringVar(value="BFS")
+        self.selected_algorithm = StringVar(value="BFS_algorithm")
         
         # Buttons for each of the algorithms included
-        self.radio_button_BFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="BFS", text="Breadth First Search",font=("Consolas", 12))
-        self.radio_button_DFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="DFS", text="Depth First Search",font=("Consolas", 12))
-        self.radio_button_UFC = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="UFC", text="Uniform Cost Search",font=("Consolas", 12))
-        self.radio_button_BeFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="BeFS", text="Best First Search",font=("Consolas", 12))
-        self.radio_button_astar = CTkRadioButton(left_frame, variable=self.selected_algorithm, value="A*", text="A* Search",font=("Consolas", 12))
+        self.radio_button_BFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="BFS_algorithm", text="Breadth First Search",font=("Consolas", 12))
+        self.radio_button_DFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="DFS_algorithm", text="Depth First Search",font=("Consolas", 12))
+        self.radio_button_UFC = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="UFC_algorithm", text="Uniform Cost Search",font=("Consolas", 12))
+        self.radio_button_BeFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="BeFE_algorithm", text="Best First Search",font=("Consolas", 12))
+        self.radio_button_astar = CTkRadioButton(left_frame, variable=self.selected_algorithm, value="Astar_search_algorithm", text="A* Search",font=("Consolas", 12))
         self.radio_button_BFS.grid(row=0, column=0, padx=10, sticky="w")
         self.radio_button_DFS.grid(row=1, column=0, padx=10, sticky="w")
         self.radio_button_UFC.grid(row=2, column=0, padx=10, sticky="w")
@@ -134,11 +133,11 @@ class GUI(CTk):
         self.reset_button = CTkButton(result_frame, text="RESET", width=100, height=50, corner_radius=50)
         self.reset_button.grid(row=0, column=1, padx=(2.5,2.5), pady=10, sticky="w")
         
-        self.path_cost_label = CTkLabel(result_frame, text="Path Cost: ")
-        self.path_cost_label.grid(row=0, column=2, padx=(2.5,2.5), pady=10)
+        self.path_cost_label = CTkLabel(result_frame, text="Path Length: ")
+        self.path_cost_label.grid(row=0, column=2, padx=(2.5,2.5), pady=10, sticky="w")
         
-        self.explored_label = CTkLabel(result_frame, text="Nodes explored: ")
-        self.explored_label.grid(row=0, column=3, padx=((2.5,5)), pady=10)
+        self.explored_label = CTkLabel(result_frame, text="Nodes Explored: ")
+        self.explored_label.grid(row=0, column=3, padx=((2.5,5)), pady=10, sticky="w")
         
         """
         INITIAL STATE & GOAL STATE
@@ -193,7 +192,27 @@ class GUI(CTk):
                 entry.delete(0,"end")
                 entry.configure(validate="all")
     
-    def solve(self):
+    def size_update(self, tile):
+        pass
+        
+    
+    def update_state_eightpuzzle(self, solution, step_index=0):
+        if step_index >=len(solution):
+            return
+
+        step = solution[step_index]
+        print(step)
+        for i, row in enumerate(self.solution_representation):
+            for j, column in enumerate(row):
+                if step[i][j] == 0:
+                    column.configure(text=f"")
+                else:
+                    column.configure(text=f"{step[i][j]}")
+        
+        self.after(500, lambda : self.update_state_eightpuzzle(solution, step_index+1))
+    
+    
+    def solve_eightpuzzle(self):
             array = []
             for row in self.entries:
                 row_list = []
@@ -203,19 +222,27 @@ class GUI(CTk):
                 array.append(row_list)
             problem = EightProblem(array)
             solver = Search_Algorithms(problem)
-            solution = solver.Astar_search_algorithm()
-            for i, row in enumerate(self.solution_representation):
-                for j, column in enumerate(row):
-                    column.configure(text=f"{str(array[i][j])}")
+            
+            get_algorithm = self.selected_algorithm.get()
+            assign_algorithm = getattr(solver, get_algorithm, None)
+            
+            result = assign_algorithm()
+            solution = problem.reverse_steps(result)
+            
+            # 3 5 7 8 1 2 6 4 0
+            self.update_state_eightpuzzle(solution, 0)
+            
+            self.after(10, lambda: self.path_cost_label.configure(text=f"Path Length: {len(solution)}"))
+            self.after(10, lambda: self.explored_label.configure(text=f"Nodes Explored: {result.explored}"))
+            self.after(10, lambda: self.solution_text.configure(text=f"Solution\n\n{get_algorithm}"))
+            
                     
             
     # Setting up the Eight Puzzle UI
     def EightPuzzle_gui(self):
-       
-        
 
         self.reset_button.configure(command=self.reset_board)
-        self.solve_button.configure(command=self.solve)
+        self.solve_button.configure(command=self.solve_eightpuzzle)
         """
         Banner change
         """
@@ -301,11 +328,10 @@ class GUI(CTk):
         self.solution_frame_output.grid_columnconfigure(1, weight=1, uniform="a")
 
         # create a list of goal labels
-        self.solution_empty = [["","",""],["","",""],["","",""]]
         for i in range(3):
             row_entries = []
             for j in range(3):
-                solution_tile = CTkLabel(self.solution_frame_output, text=f"{self.solution_empty[i][j]}", 
+                solution_tile = CTkLabel(self.solution_frame_output, text="", 
                                      width=30, height=30, font=(None, 20), fg_color="black", corner_radius=5)
                 if j == 0:
                     sticky_value = "e"

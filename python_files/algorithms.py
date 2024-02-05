@@ -5,12 +5,13 @@ from python_files.containers import Stack, Prio_queue, Queue
 
 # node class, that holds information about the state, its  
 class Node:
-    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0):
+    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0):
         self.state = state
         self.gx = goal_cost
         self.hx = heuristic_cost
         self.parent = parent
         self.depth = depth
+        self.explored = explored
         
     def __repr__(self):
         return f"{self.state}, Goal:{self.gx}, Heuristic:{self.hx}, Parent:{self.parent}"
@@ -262,7 +263,9 @@ class Search_Algorithms:
             visited.add(tuple(map(tuple, current_node.state)))
             
             if self.problem.goal_test(current_node):
-                return self.problem.reverse_steps(current_node)
+                current_node.explored = len(visited)
+                return current_node
+                # return self.problem.reverse_steps(current_node)
             
             for action in self.problem.actions(current_node.state):
                 new_state = self.problem.result(current_node.state, action)
@@ -282,7 +285,7 @@ class Search_Algorithms:
             current_node = frontier.dequeue()
             
             if self.problem.goal_test(current_node):
-                return self.problem.reverse_steps(current_node)
+                return current_node
             
             if current_node.depth <= limit:
                 visited.add(tuple(map(tuple, current_node.state)))
