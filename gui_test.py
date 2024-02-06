@@ -4,7 +4,7 @@ from python_files.algorithms import *
 from python_files.containers import *
 import threading
 
-theme_path = "C:\\Users\\bager\\OneDrive\\Projects\\Search_algorithms_visualizer\\theme\\Hades.json"
+theme_path = "theme\\Hades.json"
 set_default_color_theme(theme_path)
 
 """
@@ -162,6 +162,9 @@ class GUI(CTk):
         
         self.stop_search = False
         
+    """
+    Display for errors
+    """    
     def error_window_destroy(self):
         self.error.destroy()
         self.reset_board()

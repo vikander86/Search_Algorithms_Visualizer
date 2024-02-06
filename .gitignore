@@ -12,3 +12,5 @@ myenv/
 /python_files/tempCodeRunnerFile.py
 python_files/__pycache__/
 python_files/tempCodeRunnerFile.py
+.vscode
+./vscode
