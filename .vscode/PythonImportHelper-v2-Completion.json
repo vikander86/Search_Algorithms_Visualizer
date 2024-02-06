@@ -230,6 +230,42 @@
         "documentation": {}
     },
     {
+        "label": "error",
+        "kind": 5,
+        "importPath": "tempCodeRunnerFile",
+        "description": "tempCodeRunnerFile",
+        "peekOfCode": "error = CTkToplevel(self)\n            error.title(\"Error\")\n            error.geometry(\"300x200\")\n            error_text = CTkLabel(error, text=\"You Chose Poorly\\n Inversion prohibited\")\n            error_text.pack(padx=5, pady=5)\n            close_button = CTkButton(error, text=\"Close\", command=error.destroy)\n            close_button.pack(pady=10)",
+        "detail": "tempCodeRunnerFile",
+        "documentation": {}
+    },
+    {
+        "label": "inversion_counter",
+        "kind": 2,
+        "importPath": "Testing_inversion_counter",
+        "description": "Testing_inversion_counter",
+        "peekOfCode": "def inversion_counter(array):\n    number_of_inversion = 0\n    for i in range(len(array)):\n        index = i + 1\n        for j in range(index,len(array)):\n            print(array[i], array[j])\n            if array[i] == array[j] or array[j] == 0 or array[i] == 0:\n                continue\n            elif array[i] > array[j]:\n                number_of_inversion += 1",
+        "detail": "Testing_inversion_counter",
+        "documentation": {}
+    },
+    {
+        "label": "array",
+        "kind": 5,
+        "importPath": "Testing_inversion_counter",
+        "description": "Testing_inversion_counter",
+        "peekOfCode": "array = [1,2,5,4,8,7,6,0,3]\ntest = inversion_counter(array)\nprint(test)",
+        "detail": "Testing_inversion_counter",
+        "documentation": {}
+    },
+    {
+        "label": "test",
+        "kind": 5,
+        "importPath": "Testing_inversion_counter",
+        "description": "Testing_inversion_counter",
+        "peekOfCode": "test = inversion_counter(array)\nprint(test)",
+        "detail": "Testing_inversion_counter",
+        "documentation": {}
+    },
+    {
         "label": "GUI",
         "kind": 6,
         "importPath": "test_with_label",

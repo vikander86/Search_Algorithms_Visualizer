@@ -144,7 +144,6 @@ class GUI(CTk):
         """
         INITIAL STATE, GOAL STATE, SOLUTION
         """
-        self.entries = []
         
         self.initial_state_text = CTkLabel(self.initial_frame, text="Initial State", fg_color="transparent", font=("Consolas", 14))
         self.initial_state_text.grid(row=0, column=0, sticky="nwe", padx=5, pady=5)
@@ -159,8 +158,28 @@ class GUI(CTk):
         self.solution_action.grid(row=2, column=0, padx=5,pady=2.5, sticky="nwe")
         
         self.solution_progress = CTkProgressBar(self.solution_frame, orientation="horizontal", height=20, width=300)
-
+        self.solution_progress.set(0)
         
+        self.stop_search = False
+        
+    def error_window_destroy(self):
+        self.error.destroy()
+        self.reset_board()
+           
+        
+    def error_popup_loc(self):
+        main_window_width = self.winfo_width()
+        main_window_height = self.winfo_height()
+        main_window_x = self.winfo_x()
+        main_window_y = self.winfo_y()
+
+        error_width = 200
+        error_height = 100
+
+        center_x = main_window_x + (main_window_width - error_width) // 2
+        center_y = main_window_y + (main_window_height - error_height) // 2
+        return center_x, center_y
+    
     def button_exit(self):
         exit(0)
     
@@ -199,14 +218,20 @@ class GUI(CTk):
     
     # Reset entry inputs
     def reset_board(self):
-        for row_entries in (self.entries):
+        for row_entries in self.entries:
             for entry in (row_entries):
                 entry.configure(validate="none")
                 entry.delete(0,"end")
                 entry.configure(validate="all")
-    
+        for row_label in self.solution_representation:
+            for label in row_label:
+                label.configure(text="")
+        self.solution_action.configure(font=(None, 25), text="Waiting for input")
+        self.solution_progress.set(0)
+        self.stop_search = True
+
     def update_state_eightpuzzle(self, solution, actions, step_index=0):
-        if step_index >=len(solution):
+        if step_index >=len(solution) or self.stop_search == True:
             return
 
         time = 1000 if self.selected_algorithm.get() != "DFS_algorithm" else 1
@@ -245,9 +270,26 @@ class GUI(CTk):
         else:
             self.text_size = 30
 
+    def inversion_counter(self,array):
+        number_of_inversion = 0
+        redo_array = []
+        for row in array:
+            for number in row:
+                redo_array.append(number)
+        for i in range(len(redo_array)):
+            for j in range(i+1,len(redo_array)):
+                if redo_array[j] == 0 or redo_array[i] == 0:
+                    continue
+                elif redo_array[i] > redo_array[j]:
+                    number_of_inversion += 1
+
+        return True if number_of_inversion % 2 == 0 else False
+        
+    
     def solve_eightpuzzle(self):
         self.progress = 0
         self.text_size = 25
+        self.stop_search = False
         self.solution_action.configure(font=(None, 25))
         
         self.solution_progress.set(self.progress)
@@ -261,23 +303,31 @@ class GUI(CTk):
                 number = column.get()
                 row_list.append(int(number))
             array.append(row_list)
-
-        # Setting up the Eight Puzzle problem
-        problem = EightProblem(array)
-        solver = Search_Algorithms(problem)
-        get_algorithm = self.selected_algorithm.get()           # Get the StringVar from the radiobuttons. 
-        assign_algorithm = getattr(solver, get_algorithm, None) # Match the StringVar with the algorithm method in ./Python_files/Algorithms.py
-        result = assign_algorithm()                             # Return result (final node)
-        solution = problem.reverse_steps(result)                # Return a list with initial state to goal state
-        actions = problem.reverse_actions(result)               # Return a list with actions based on the empty tile
-        actions.append("SUCCESS")
-
-        # 
-        self.update_state_eightpuzzle(solution, actions, 0)
         
-        self.after(0, lambda: self.result_of_solution.configure(text=f"Path Length: {len(solution)}    Nodes Explored: {result.explored}"))
-        # self.after(0, lambda: self.explored_label.configure(text=f""))
-        self.after(0, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
+        if self.inversion_counter(array):
+            # Setting up the Eight Puzzle problem
+            problem = EightProblem(array)
+            solver = Search_Algorithms(problem)
+            get_algorithm = self.selected_algorithm.get()           # Get the StringVar from the radiobuttons. 
+            assign_algorithm = getattr(solver, get_algorithm, None) # Match the StringVar with the algorithm method in ./Python_files/Algorithms.py
+            result = assign_algorithm()                             # Return result (final node)
+            solution = problem.reverse_steps(result)                # Return a list with initial state to goal state
+            actions = problem.reverse_actions(result)               # Return a list with actions based on the empty tile
+            actions.append("SUCCESS")
+
+            self.update_state_eightpuzzle(solution, actions, 0)
+            self.after(0, lambda: self.result_of_solution.configure(text=f"Path Length: {len(solution)}    Nodes Explored: {result.explored}"))
+            self.after(0, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
+        else:
+            center_x, center_y = self.error_popup_loc()
+            self.error = CTkToplevel(self)
+            self.error.title("Error")
+            self.error.geometry(f"{200}x{100}+{center_x}+{center_y}")
+            self.error.attributes('-topmost', True)
+            error_text = CTkLabel(self.error, text="Not solvable\nInversion prohibited", font=(None, 16))
+            error_text.pack(pady=5)
+            close_button = CTkButton(self.error, text="Close", command=self.error_window_destroy, font=(None, 16))
+            close_button.pack(pady=5)
 
     """ 
     Setting up the Eight Puzzle UI
@@ -340,13 +390,12 @@ class GUI(CTk):
         self.entries = create_board("entries")
         self.goal_representation = create_board("goal_labels")
         self.solution_representation = create_board("solution_labels", 50,40)
+        self.solution_action.configure(text="Waiting for input")
         self.validate_eightpuzzle_input()
         
         
 
 def main():
-    
-    
     app = GUI()
     setup_thread = threading.Thread(target=app.mainloop())
     setup_thread.start()
