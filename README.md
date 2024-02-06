@@ -3,7 +3,7 @@
 ## Description
 Search Algorithms Visualizer is a Python-based application designed to demonstrate the workings and efficiency of various search algorithms. This tool allows users to visually compare how different algorithms tackle search problems across a range of scenarios.
 
-This project utilizes CTkinter for the graphical user interface, providing an interactive and user-friendly experience. Whether you're exploring search algorithms for the first time or looking to deepen your understanding, this app offers a hands-on approach to learning.
+This project utilizes CTkinter for the graphical user interface, providing an interactive and user-friendly experience.
 
 ## Features
 - **Visual Representation**: See how algorithms like BFS, DFS, A*, and others navigate through problems.
