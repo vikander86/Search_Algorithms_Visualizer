@@ -1,9 +1,12 @@
 from tkinter import *
 from customtkinter import *
 from python_files.algorithms import *
-
+from python_files.containers import *
 import threading
+import theme
 
+theme_path = os.path.expanduser("theme/Hades.json")
+set_default_color_theme(theme_path)
 """
 init states for Eight Puzzle
 """
@@ -81,7 +84,9 @@ class GUI(CTk):
         self.solution_frame = CTkFrame(display_frame)
         self.solution_frame.grid(row=1, rowspan=2, column=1, sticky="nswe")
         self.solution_frame.grid_rowconfigure(0, weight=1, uniform="a")
-        self.solution_frame.grid_rowconfigure((1,2), weight=3, uniform="a")
+        self.solution_frame.grid_rowconfigure(1, weight=3, uniform="a")
+        self.solution_frame.grid_rowconfigure(2, weight=1, uniform="a")
+        self.solution_frame.grid_rowconfigure(3, weight=1, uniform="a")
         self.solution_frame.grid_columnconfigure(0, weight=1, uniform="a")
         
         self.solution_representation = []
@@ -139,7 +144,7 @@ class GUI(CTk):
         self.explored_label.grid(row=0, column=3, padx=((2.5,5)), pady=10, sticky="w")
         
         """
-        INITIAL STATE & GOAL STATE
+        INITIAL STATE, GOAL STATE, SOLUTION
         """
         self.entries = []
         
@@ -152,10 +157,12 @@ class GUI(CTk):
         self.solution_banner = CTkLabel(self.solution_frame, text="Solution", fg_color="transparent", font=("Consolas", 14))
         self.solution_banner.grid(row=0, column=0, padx=5,pady=5, sticky="nwe")
         
-        self.solution_text = CTkLabel(self.solution_frame, text="", fg_color="transparent", font=("Consolas", 20))
-        self.solution_text.grid(row=2, column=0, padx=5,pady=5, sticky="nwe")
+        self.solution_action = CTkLabel(self.solution_frame, text="", fg_color="transparent", font=("Consolas", 20), height=80)
+        self.solution_action.grid(row=2, column=0, padx=5,pady=2.5, sticky="nwe")
         
+        self.solution_progress = CTkProgressBar(self.solution_frame, orientation="horizontal", height=20, width=300)
 
+        
     def button_exit(self):
         exit(0)
     
@@ -204,13 +211,42 @@ class GUI(CTk):
         for i, row in enumerate(self.solution_representation):
             for j, column in enumerate(row):
                 column.configure(text=f"{step[i][j]}" if step[i][j] != 0 else "")
-                if step_index != len(action):
-                    self.solution_text.configure(text=f"{action}")
+        if self.selected_algorithm.get() != "DFS_algorithm":
+            self.solution_action.configure(text=f"{action}")
+            self.expand(action)
+            self.text_size = 30
+        else:
+            if self.progress < 0.25:
+                self.solution_action.configure(text=f"Yikes, check that path length!")
+            elif 0.25 < self.progress < 0.50:
+                self.solution_action.configure(text=f"Hang in there.")
+            elif 0.50 < self.progress < 0.75:
+                self.solution_action.configure(text=f"... I would grab a coffee")            
+            elif 0.75 < self.progress < 1:
+                self.solution_action.configure(text=f"Almost there...")
+                
+        self.progress += 1 / len(solution)
+        if step_index == len(solution) - 1:
+            self.solution_action.configure(text=f"SUCCESS")
 
-      
+        self.solution_progress.set(self.progress)
         self.after(time, lambda : self.update_state_eightpuzzle(solution, actions, step_index+1))
-    
+
+    def expand(self, action):
+        if self.text_size < 50:
+            self.text_size += 0.5
+            self.solution_action.configure(font=(None, self.text_size))
+            self.after(5, lambda: self.expand(action))
+        else:
+            self.text_size = 30
+
     def solve_eightpuzzle(self):
+        self.progress = 0
+        self.text_size = 25
+        self.solution_action.configure(font=(None, 25))
+        
+        self.solution_progress.set(self.progress)
+        
         array = []
         for row in self.entries:
             row_list = []
@@ -218,34 +254,31 @@ class GUI(CTk):
                 number = column.get()
                 row_list.append(int(number))
             array.append(row_list)
-            
-            
+   
         problem = EightProblem(array)
         solver = Search_Algorithms(problem)
-
         get_algorithm = self.selected_algorithm.get()
         assign_algorithm = getattr(solver, get_algorithm, None)
-        
         result = assign_algorithm()
         solution = problem.reverse_steps(result)
         actions = problem.reverse_actions(result)
         actions.append("SUCCESS")
 
+        self.solution_progress.grid(row=3, column=0, padx=5, pady=2.5)
         self.update_state_eightpuzzle(solution, actions, 0)
         
-        self.after(10, lambda: self.path_cost_label.configure(text=f"Path Length: {len(solution)}"))
-        self.after(10, lambda: self.explored_label.configure(text=f"Nodes Explored: {result.explored}"))
-        self.after(10, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
-        
-
-            
-                    
-            
-    # Setting up the Eight Puzzle UI
+        self.after(0, lambda: self.path_cost_label.configure(text=f"Path Length: {len(solution)}"))
+        self.after(0, lambda: self.explored_label.configure(text=f"Nodes Explored: {result.explored}"))
+        self.after(0, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
+   
+    """ 
+    Setting up the Eight Puzzle UI
+    """
     def EightPuzzle_gui(self):
 
         self.reset_button.configure(command=self.reset_board)
         self.solve_button.configure(command=self.solve_eightpuzzle)
+
         """
         Banner change
         """
@@ -325,28 +358,15 @@ class GUI(CTk):
         for i in range(3):
             row_entries = []
             for j in range(3):
-                solution_tile = CTkLabel(self.solution_frame_output, text="", 
-                                     width=30, height=30, font=(None, 20), fg_color="black", corner_radius=5)
-                if j == 0:
-                    sticky_value = "e"
-                elif j == 2:
-                    sticky_value = "w"
-                else:
-                    sticky_value = ""
+                solution_tile = CTkLabel(self.solution_frame_output, text="", width=50, height=50, font=(None, 40), fg_color="black", corner_radius=5)
+                sticky_value = "e" if j==0 else "w" if j == 2 else ""
                 solution_tile.grid(row=i, column=j, sticky=sticky_value)
                 row_entries.append(solution_tile)
             self.solution_representation.append(row_entries)
         
-             
-        
-        
-        
-                
-
 
 def main():
-    theme_path = os.path.expanduser("theme/Hades.json")
-    set_default_color_theme(theme_path)
+    
     
     app = GUI()
     setup_thread = threading.Thread(target=app.mainloop())
