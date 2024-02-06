@@ -1,7 +1,12 @@
 myenv/
 .venv/
+/venv/
 *.so
 *.spec
 /tempCodeRunnerFile.py
-/theme/
+theme/
 *.DS_Store
+/build/
+/dist/
+python_files/__pychache__
+python_files/tempCodeRunnerFile.py
