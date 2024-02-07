@@ -1,5 +1,29 @@
 [
     {
+        "label": "heappop",
+        "importPath": "heapq",
+        "description": "heapq",
+        "isExtraImport": true,
+        "detail": "heapq",
+        "documentation": {}
+    },
+    {
+        "label": "heappush",
+        "importPath": "heapq",
+        "description": "heapq",
+        "isExtraImport": true,
+        "detail": "heapq",
+        "documentation": {}
+    },
+    {
+        "label": "abstractmethod",
+        "importPath": "abc",
+        "description": "abc",
+        "isExtraImport": true,
+        "detail": "abc",
+        "documentation": {}
+    },
+    {
         "label": "abstractmethod",
         "importPath": "abc",
         "description": "abc",
@@ -26,66 +50,140 @@
     },
     {
         "label": "Stack",
-        "importPath": "python_files.containers",
-        "description": "python_files.containers",
+        "importPath": "algorithms",
+        "description": "algorithms",
         "isExtraImport": true,
-        "detail": "python_files.containers",
+        "detail": "algorithms",
         "documentation": {}
     },
     {
         "label": "Prio_queue",
-        "importPath": "python_files.containers",
-        "description": "python_files.containers",
+        "importPath": "algorithms",
+        "description": "algorithms",
         "isExtraImport": true,
-        "detail": "python_files.containers",
+        "detail": "algorithms",
         "documentation": {}
     },
     {
         "label": "Queue",
-        "importPath": "python_files.containers",
-        "description": "python_files.containers",
+        "importPath": "algorithms",
+        "description": "algorithms",
         "isExtraImport": true,
-        "detail": "python_files.containers",
+        "detail": "algorithms",
         "documentation": {}
     },
     {
         "label": "*",
-        "importPath": "python_files.containers",
-        "description": "python_files.containers",
+        "importPath": "algorithms",
+        "description": "algorithms",
         "isExtraImport": true,
-        "detail": "python_files.containers",
+        "detail": "algorithms",
         "documentation": {}
     },
     {
         "label": "*",
-        "importPath": "python_files.containers",
-        "description": "python_files.containers",
+        "importPath": "algorithms",
+        "description": "algorithms",
         "isExtraImport": true,
-        "detail": "python_files.containers",
+        "detail": "algorithms",
         "documentation": {}
     },
     {
-        "label": "heappop",
-        "importPath": "heapq",
-        "description": "heapq",
+        "label": "Node",
+        "importPath": "utils",
+        "description": "utils",
         "isExtraImport": true,
-        "detail": "heapq",
+        "detail": "utils",
         "documentation": {}
     },
     {
-        "label": "heappush",
-        "importPath": "heapq",
-        "description": "heapq",
+        "label": "Node",
+        "importPath": "utils",
+        "description": "utils",
         "isExtraImport": true,
-        "detail": "heapq",
+        "detail": "utils",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "utils",
+        "description": "utils",
+        "isExtraImport": true,
+        "detail": "utils",
+        "documentation": {}
+    },
+    {
+        "label": "Problem",
+        "importPath": "problems",
+        "description": "problems",
+        "isExtraImport": true,
+        "detail": "problems",
+        "documentation": {}
+    },
+    {
+        "label": "Problem",
+        "importPath": "problems",
+        "description": "problems",
+        "isExtraImport": true,
+        "detail": "problems",
         "documentation": {}
     },
     {
         "label": "*",
-        "importPath": "tkinter",
-        "description": "tkinter",
+        "importPath": "problems",
+        "description": "problems",
         "isExtraImport": true,
-        "detail": "tkinter",
+        "detail": "problems",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "problems",
+        "description": "problems",
+        "isExtraImport": true,
+        "detail": "problems",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "permutations",
+        "importPath": "itertools",
+        "description": "itertools",
+        "isExtraImport": true,
+        "detail": "itertools",
+        "documentation": {}
+    },
+    {
+        "label": "permutations",
+        "importPath": "itertools",
+        "description": "itertools",
+        "isExtraImport": true,
+        "detail": "itertools",
+        "documentation": {}
+    },
+    {
+        "label": "permutations",
+        "importPath": "itertools",
+        "description": "itertools",
+        "isExtraImport": true,
+        "detail": "itertools",
         "documentation": {}
     },
     {
@@ -118,42 +216,10 @@
         "description": "customtkinter",
         "isExtraImport": true,
         "detail": "customtkinter",
-        "documentation": {}
-    },
-    {
-        "label": "*",
-        "importPath": "customtkinter",
-        "description": "customtkinter",
-        "isExtraImport": true,
-        "detail": "customtkinter",
-        "documentation": {}
-    },
-    {
-        "label": "*",
-        "importPath": "python_files.algorithms",
-        "description": "python_files.algorithms",
-        "isExtraImport": true,
-        "detail": "python_files.algorithms",
-        "documentation": {}
-    },
-    {
-        "label": "*",
-        "importPath": "python_files.algorithms",
-        "description": "python_files.algorithms",
-        "isExtraImport": true,
-        "detail": "python_files.algorithms",
         "documentation": {}
     },
     {
         "label": "Image",
-        "importPath": "PIL",
-        "description": "PIL",
-        "isExtraImport": true,
-        "detail": "PIL",
-        "documentation": {}
-    },
-    {
-        "label": "ImageTk",
         "importPath": "PIL",
         "description": "PIL",
         "isExtraImport": true,
@@ -178,145 +244,146 @@
         "documentation": {}
     },
     {
-        "label": "itertools",
+        "label": "os",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "itertools",
-        "description": "itertools",
-        "detail": "itertools",
-        "documentation": {}
-    },
-    {
-        "label": "permutations",
-        "importPath": "itertools",
-        "description": "itertools",
-        "isExtraImport": true,
-        "detail": "itertools",
-        "documentation": {}
-    },
-    {
-        "label": "Node",
-        "kind": 6,
-        "importPath": "python_files.algorithms",
-        "description": "python_files.algorithms",
-        "peekOfCode": "class Node:\n    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0,action=list()):\n        self.state = state\n        self.gx = goal_cost\n        self.hx = heuristic_cost\n        self.parent = parent\n        self.depth = depth\n        self.explored = explored\n        self.action = action\n    def __repr__(self):",
-        "detail": "python_files.algorithms",
-        "documentation": {}
-    },
-    {
-        "label": "Problem",
-        "kind": 6,
-        "importPath": "python_files.algorithms",
-        "description": "python_files.algorithms",
-        "peekOfCode": "class Problem:\n    def __init__(self,initial_state, goal_state):\n        self.initial_state = initial_state\n        self.goal_state = goal_state\n    @abstractmethod\n    def actions(self, state):\n        \"\"\"\n        Return the list of actions that can be executed in the given state.\n        \"\"\"\n        pass",
-        "detail": "python_files.algorithms",
-        "documentation": {}
-    },
-    {
-        "label": "WolfGoatCabbage",
-        "kind": 6,
-        "importPath": "python_files.algorithms",
-        "description": "python_files.algorithms",
-        "peekOfCode": "class WolfGoatCabbage(Problem):\n    \"\"\" The problem of a farmer, trying to cross a river with his wolf, goat and cabbage\n    with the use of a row boat that only fits the farmer and 1 item. If the wolf is ever left\n    alone with the goat, it will eat it. If the goat is left with the cabbage, it will eat it.\n    The problem is seperated in two sets, left and right, to illustrate the left and right bank of the river.\n    \"\"\"\n    def __init__(self, initial_state, goal_state=Node((sorted(tuple()),sorted(tuple({\"Cabbage\", \"Farmer\",\"Goat\",\"Wolf\"}))))):\n        super().__init__(Node(initial_state), goal_state)\n    def __repr__(self):\n        return \"------Wolf Goat Cabbage problem------\"",
-        "detail": "python_files.algorithms",
-        "documentation": {}
-    },
-    {
-        "label": "EightProblem",
-        "kind": 6,
-        "importPath": "python_files.algorithms",
-        "description": "python_files.algorithms",
-        "peekOfCode": "class EightProblem(Problem):\n    \"\"\"\n    Problem: Eight Puzzle\n    Returns: List of states from initial to goal.\n    \"\"\"\n    def __init__(self,initial_state, goal_state=Node([[1,2,3], [4,5,6], [7,8,0]],0,0, None)):\n        super().__init__(Node(initial_state,0,0,None), goal_state)\n        self.width = 3\n    def __repr__(self):\n        return \"------Eight Puzzle problem------\"",
-        "detail": "python_files.algorithms",
-        "documentation": {}
-    },
-    {
-        "label": "Search_Algorithms",
-        "kind": 6,
-        "importPath": "python_files.algorithms",
-        "description": "python_files.algorithms",
-        "peekOfCode": "class Search_Algorithms:\n    def __init__(self, problem):\n        self.problem = problem\n        self.count = 0\n    def Search_algorithm(self, queue=Queue, heuristic=False, cost=False):\n        frontier = queue()\n        visited = set()\n        frontier.enqueue(self.problem.initial_state)\n        while not frontier.is_empty():\n            self.count += 1",
-        "detail": "python_files.algorithms",
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
         "documentation": {}
     },
     {
         "label": "Stack",
         "kind": 6,
-        "importPath": "python_files.containers",
-        "description": "python_files.containers",
+        "importPath": "algorithms.containers",
+        "description": "algorithms.containers",
         "peekOfCode": "class Stack:\n    def __init__(self):\n        self.stack = []\n    def enqueue(self, node):\n        self.stack.append(node)\n    def dequeue(self):\n        if self.is_empty():\n            return None\n        return self.stack.pop()\n    def is_empty(self):",
-        "detail": "python_files.containers",
+        "detail": "algorithms.containers",
         "documentation": {}
     },
     {
         "label": "Queue",
         "kind": 6,
-        "importPath": "python_files.containers",
-        "description": "python_files.containers",
+        "importPath": "algorithms.containers",
+        "description": "algorithms.containers",
         "peekOfCode": "class Queue:\n    def __init__(self):\n        self.queue = []\n    def enqueue(self, node):\n        self.queue.append(node)\n    def dequeue(self):\n        if self.is_empty():\n            return None\n        return self.queue.pop(0)\n    def is_empty(self):",
-        "detail": "python_files.containers",
+        "detail": "algorithms.containers",
         "documentation": {}
     },
     {
         "label": "Prio_queue",
         "kind": 6,
-        "importPath": "python_files.containers",
-        "description": "python_files.containers",
+        "importPath": "algorithms.containers",
+        "description": "algorithms.containers",
         "peekOfCode": "class Prio_queue:\n    def __init__(self):\n        self.queue = []\n    def enqueue(self, node):\n        heappush(self.queue, (node.fx(), node))\n    def dequeue(self):\n        return heappop(self.queue)[1]\n    def is_empty(self):\n        return len(self.queue) == 0\n    def printqueue(self):",
-        "detail": "python_files.containers",
+        "detail": "algorithms.containers",
+        "documentation": {}
+    },
+    {
+        "label": "Search_Algorithms",
+        "kind": 6,
+        "importPath": "algorithms.search",
+        "description": "algorithms.search",
+        "peekOfCode": "class Search_Algorithms:\n    def __init__(self, problem):\n        self.problem = problem\n        self.count = 0\n    def Search_algorithm(self, queue=Queue, heuristic=False, cost=False):\n        frontier = queue()\n        visited = set()\n        frontier.enqueue(self.problem.initial_state)\n        while not frontier.is_empty():\n            self.count += 1",
+        "detail": "algorithms.search",
+        "documentation": {}
+    },
+    {
+        "label": "Problem",
+        "kind": 6,
+        "importPath": "problems.base",
+        "description": "problems.base",
+        "peekOfCode": "class Problem:\n    def __init__(self,initial_state, goal_state):\n        self.initial_state = initial_state\n        self.goal_state = goal_state\n    @abstractmethod\n    def actions(self, state):\n        \"\"\"\n        Return the list of actions that can be executed in the given state.\n        \"\"\"\n        pass",
+        "detail": "problems.base",
+        "documentation": {}
+    },
+    {
+        "label": "EightPuzzle",
+        "kind": 6,
+        "importPath": "problems.EightPuzzle",
+        "description": "problems.EightPuzzle",
+        "peekOfCode": "class EightPuzzle(Problem):\n    \"\"\"\n    Problem: Eight Puzzle\n    Returns: List of states from initial to goal.\n    \"\"\"\n    def __init__(self,initial_state, goal_state=Node([[1,2,3], [4,5,6], [7,8,0]],0,0, None)):\n        super().__init__(Node(initial_state,0,0,None), goal_state)\n        self.width = 3\n    def __repr__(self):\n        return \"------Eight Puzzle problem------\"",
+        "detail": "problems.EightPuzzle",
+        "documentation": {}
+    },
+    {
+        "label": "WolfGoatCabbage",
+        "kind": 6,
+        "importPath": "problems.WolfGoatCabbage",
+        "description": "problems.WolfGoatCabbage",
+        "peekOfCode": "class WolfGoatCabbage(Problem):\n    \"\"\" The problem of a farmer, trying to cross a river with his wolf, goat and cabbage\n    with the use of a row boat that only fits the farmer and 1 item. If the wolf is ever left\n    alone with the goat, it will eat it. If the goat is left with the cabbage, it will eat it.\n    The problem is seperated in two sets, left and right, to illustrate the left and right bank of the river.\n    \"\"\"\n    def __init__(self, initial_state, goal_state=Node((sorted(tuple()),sorted(tuple({\"Cabbage\", \"Farmer\",\"Goat\",\"Wolf\"}))))):\n        super().__init__(Node(initial_state), goal_state)\n    def __repr__(self):\n        return \"------Wolf Goat Cabbage problem------\"",
+        "detail": "problems.WolfGoatCabbage",
+        "documentation": {}
+    },
+    {
+        "label": "generate_random_maze",
+        "kind": 2,
+        "importPath": "test_functions.random_maze_test",
+        "description": "test_functions.random_maze_test",
+        "peekOfCode": "def generate_random_maze(size=10, wall_prob=0.3):\n    maze = np.random.choice([\" \", \"#\"], size=(size, size), p=[1-wall_prob, wall_prob])\n    positions = [[0,1],[1,1],[1,0]]\n    count_s, count_g=0,0\n    count_s = sum(1 for pos in positions if maze[pos[0]][pos[1]] == \"#\")\n    count_g = sum(1 for pos in positions if maze[size-1-pos[0]][size-1-pos[1]] == \"#\")\n    print(count_g, count_s)\n    if count_s == 3 or count_g == 3:\n        generate_random_maze()\n    maze[0, 0] = \"S\"",
+        "detail": "test_functions.random_maze_test",
+        "documentation": {}
+    },
+    {
+        "label": "maze",
+        "kind": 5,
+        "importPath": "test_functions.random_maze_test",
+        "description": "test_functions.random_maze_test",
+        "peekOfCode": "maze = generate_random_maze()\nprint(maze)",
+        "detail": "test_functions.random_maze_test",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "kind": 6,
+        "importPath": "utils.node",
+        "description": "utils.node",
+        "peekOfCode": "class Node:\n    \"\"\"Initialize a new instance of the Node Class\n    args:\n        state(any) : The state represented by a node\n    \"\"\"\n    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0,action=list()):\n        self.state = state\n        self.gx = goal_cost\n        self.hx = heuristic_cost\n        self.parent = parent",
+        "detail": "utils.node",
         "documentation": {}
     },
     {
         "label": "GUI",
         "kind": 6,
-        "importPath": "gui_test-DESKTOP-IN4TUCJ",
-        "description": "gui_test-DESKTOP-IN4TUCJ",
+        "importPath": "gui_test",
+        "description": "gui_test",
         "peekOfCode": "class GUI(CTk):\n    def __init__(self, *args, **kwargs):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__(*args, **kwargs, )\n        self.geometry(\"1000x800\")\n        self.title(\"Search Algorithms Visualizer\")\n        self.grid_columnconfigure((0,1,2,3,4), weight=1, uniform=\"a\")\n        self.grid_rowconfigure(0,weight=1, uniform=\"a\")",
-        "detail": "gui_test-DESKTOP-IN4TUCJ",
+        "detail": "gui_test",
         "documentation": {}
     },
     {
         "label": "main",
         "kind": 2,
-        "importPath": "gui_test-DESKTOP-IN4TUCJ",
-        "description": "gui_test-DESKTOP-IN4TUCJ",
+        "importPath": "gui_test",
+        "description": "gui_test",
         "peekOfCode": "def main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
-        "detail": "gui_test-DESKTOP-IN4TUCJ",
-        "documentation": {}
-    },
-    {
-        "label": "theme_path",
-        "kind": 5,
-        "importPath": "gui_test-DESKTOP-IN4TUCJ",
-        "description": "gui_test-DESKTOP-IN4TUCJ",
-        "peekOfCode": "theme_path = \"theme/Hades.json\"\nset_default_color_theme(theme_path)\n\"\"\"\ninit states for Eight Puzzle\n\"\"\"\ngoal_state = [[1,2,3],\n              [4,5,6],\n              [7,8,\"\"]]\nclass GUI(CTk):\n    def __init__(self, *args, **kwargs):",
-        "detail": "gui_test-DESKTOP-IN4TUCJ",
+        "detail": "gui_test",
         "documentation": {}
     },
     {
         "label": "goal_state",
         "kind": 5,
-        "importPath": "gui_test-DESKTOP-IN4TUCJ",
-        "description": "gui_test-DESKTOP-IN4TUCJ",
-        "peekOfCode": "goal_state = [[1,2,3],\n              [4,5,6],\n              [7,8,\"\"]]\nclass GUI(CTk):\n    def __init__(self, *args, **kwargs):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__(*args, **kwargs, )\n        self.geometry(\"1000x800\")",
-        "detail": "gui_test-DESKTOP-IN4TUCJ",
-        "documentation": {}
-    },
-    {
-        "label": "GUI",
-        "kind": 6,
         "importPath": "gui_test",
         "description": "gui_test",
-        "peekOfCode": "class GUI(CTk):\n    def __init__(self, *args, **kwargs):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__(*args, **kwargs, )\n        self.geometry(\"1000x800\")\n        self.title(\"Search Algorithms Visualizer\")\n        self.grid_columnconfigure((0,1,2,3,4), weight=1, uniform=\"a\")\n        self.grid_rowconfigure(0,weight=1, uniform=\"a\")",
+        "peekOfCode": "goal_state = [[1,2,3],\n              [4,5,6],\n              [7,8,\"\"]]\nclass GUI(CTk):\n    def __init__(self, *args, **kwargs):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__(*args, **kwargs, )\n        self.geometry(\"1000x800\")",
         "detail": "gui_test",
         "documentation": {}
     },
     {
-        "label": "main",
-        "kind": 2,
+        "label": "script_dir",
+        "kind": 5,
         "importPath": "gui_test",
         "description": "gui_test",
-        "peekOfCode": "def main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
+        "peekOfCode": "script_dir = os.path.dirname(__file__)\nbg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\ntheme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():",
+        "detail": "gui_test",
+        "documentation": {}
+    },
+    {
+        "label": "bg_wcg_image_path",
+        "kind": 5,
+        "importPath": "gui_test",
+        "description": "gui_test",
+        "peekOfCode": "bg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\ntheme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
         "detail": "gui_test",
         "documentation": {}
     },
@@ -325,62 +392,62 @@
         "kind": 5,
         "importPath": "gui_test",
         "description": "gui_test",
-        "peekOfCode": "theme_path = \"theme/Hades.json\"\nset_default_color_theme(theme_path)\n\"\"\"\ninit states for Eight Puzzle\n\"\"\"\ngoal_state = [[1,2,3],\n              [4,5,6],\n              [7,8,\"\"]]\nclass GUI(CTk):\n    def __init__(self, *args, **kwargs):",
+        "peekOfCode": "theme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
         "detail": "gui_test",
-        "documentation": {}
-    },
-    {
-        "label": "goal_state",
-        "kind": 5,
-        "importPath": "gui_test",
-        "description": "gui_test",
-        "peekOfCode": "goal_state = [[1,2,3],\n              [4,5,6],\n              [7,8,\"\"]]\nclass GUI(CTk):\n    def __init__(self, *args, **kwargs):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__(*args, **kwargs, )\n        self.geometry(\"1000x800\")",
-        "detail": "gui_test",
-        "documentation": {}
-    },
-    {
-        "label": "inversion_counters",
-        "kind": 2,
-        "importPath": "Testing_inversion_counter",
-        "description": "Testing_inversion_counter",
-        "peekOfCode": "def inversion_counters(array):\n    number_of_inversion = 0\n    length = len(array)\n    number_of_inversion = sum(1 for i in range(length) for j in range(i+1, length)\n                                  if 0 not in (array[i],array[j])\n                                  and array[i] > array[j])\n    if number_of_inversion % 2 == 0:\n        return True            \n# array = [1,2,5,4,8,7,6,0,3]\n# test = inversion_counters(array)",
-        "detail": "Testing_inversion_counter",
-        "documentation": {}
-    },
-    {
-        "label": "test",
-        "kind": 5,
-        "importPath": "Testing_inversion_counter",
-        "description": "Testing_inversion_counter",
-        "peekOfCode": "test = list(itertools.permutations([0,1,2,3,4,5,6,7,8]))\ncount = sum(1 for i in test if inversion_counters(i))\nprint(test[0])\n# for i in test:\n#     if inversion_counters(i):\n#         count +=1\nprint(count)\nprint(len(test))",
-        "detail": "Testing_inversion_counter",
-        "documentation": {}
-    },
-    {
-        "label": "count",
-        "kind": 5,
-        "importPath": "Testing_inversion_counter",
-        "description": "Testing_inversion_counter",
-        "peekOfCode": "count = sum(1 for i in test if inversion_counters(i))\nprint(test[0])\n# for i in test:\n#     if inversion_counters(i):\n#         count +=1\nprint(count)\nprint(len(test))",
-        "detail": "Testing_inversion_counter",
         "documentation": {}
     },
     {
         "label": "GUI",
         "kind": 6,
-        "importPath": "test_with_label",
-        "description": "test_with_label",
-        "peekOfCode": "class GUI(CTk):\n    def __init__(self, *args, **kwargs):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__(*args, **kwargs, )\n        self.geometry(\"1000x800\")\n        self.grid_rowconfigure((0,1),weight=1,uniform=\"a\")\n        self.grid_columnconfigure((0,1), weight=1, uniform=\"a\")\n        self.label1 = CTkLabel(self, text=\"Hey\", font=(None, 20))",
-        "detail": "test_with_label",
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "class GUI(CTk):\n    def __init__(self, *args, **kwargs):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__(*args, **kwargs, )\n        self.geometry(\"1000x800\")\n        self.title(\"Search Algorithms Visualizer\")\n        self.grid_columnconfigure((0,1,2,3,4), weight=1, uniform=\"a\")\n        self.grid_rowconfigure(0,weight=1, uniform=\"a\")",
+        "detail": "main",
         "documentation": {}
     },
     {
         "label": "main",
         "kind": 2,
-        "importPath": "test_with_label",
-        "description": "test_with_label",
-        "peekOfCode": "def main():\n    theme_path = os.path.expanduser(\"theme/Hades.json\")\n    set_default_color_theme(theme_path)\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
-        "detail": "test_with_label",
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "goal_state",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "goal_state = [[1,2,3],\n              [4,5,6],\n              [7,8,\"\"]]\nclass GUI(CTk):\n    def __init__(self, *args, **kwargs):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__(*args, **kwargs, )\n        self.geometry(\"1000x800\")",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "script_dir",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "script_dir = os.path.dirname(__file__)\nbg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\ntheme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "bg_wcg_image_path",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "bg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\ntheme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "theme_path",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "theme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
+        "detail": "main",
         "documentation": {}
     }
 ]

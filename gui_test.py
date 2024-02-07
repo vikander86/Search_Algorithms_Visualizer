@@ -1,13 +1,12 @@
 from tkinter import *
 from customtkinter import *
-from python_files.algorithms import *
-from python_files.containers import *
+from algorithms import *
+from problems import *
 from PIL import Image
 from itertools import permutations
 import threading
+import os
 
-theme_path = "theme/Hades.json"
-set_default_color_theme(theme_path)
 
 """
 init states for Eight Puzzle
@@ -147,7 +146,7 @@ class GUI(CTk):
         self.game_on = False
         
         self.numbers_left = [0,1,2,3,4,5,6,7,8]
-        self.numbers_entered = []        
+        self.numbers_entered = []
     """
     INITIAL STATE, GOAL STATE, SOLUTION
     """
@@ -298,7 +297,8 @@ class GUI(CTk):
                                                     f"{direction}")
         self.expand(action,10,30)
         self.text_size = 10
-                 
+        self.progress += 1 / len(solution) # Calculate progress bar increment
+        self.solution_progress.set(self.progress) # Update progress bar
         self.after(time, lambda: self.update_state_wgc(solution,actions, step_index + 1))
     
     def reset_wcg_puzzle(self):
@@ -332,7 +332,7 @@ class GUI(CTk):
         Return a frame with specific configurations for the Eight Puzzle
         """
         def frame_builder(parent_frame,image_size=(150,220), placement=0.5):
-            river_bg = CTkImage(light_image=Image.open(r"img\bg_wgc.png"), size=image_size)
+            river_bg = CTkImage(light_image=Image.open(bg_wcg_image_path), size=image_size)
             frame = CTkFrame(parent_frame,height = 200, width=275,border_width=0, fg_color="transparent")
             frame.place(relx=0.5, rely=placement, anchor="center")
             
@@ -549,7 +549,7 @@ class GUI(CTk):
 
         if self.inversion_counter(array): # If solvable
             # Setting up the Eight Puzzle problem
-            problem = EightProblem(array)
+            problem = EightPuzzle(array)
             solver = Search_Algorithms(problem)
             get_algorithm = self.selected_algorithm.get()           # Get the StringVar from the radiobuttons. 
             assign_algorithm = getattr(solver, get_algorithm, None) # Match the StringVar with the algorithm method in ./Python_files/Algorithms.py
@@ -643,8 +643,12 @@ class GUI(CTk):
         self.solution_representation = create_board("solution_labels", 50,40)
         self.solution_action.configure(text="Waiting for input")
         self.validate_eightpuzzle_input()
-        
-        
+script_dir = os.path.dirname(__file__)
+     
+bg_wcg_image_path = os.path.join(script_dir,"resources", "images", "bg_wgc.png")
+
+theme_path = os.path.join("resources", "themes", "hades.json")        
+set_default_color_theme(theme_path)
 
 def main():
     app = GUI()

@@ -1,8 +1,0 @@
-myenv/
-.venv/
-*.so
-*.spec
-/tempCodeRunnerFile.py
-/theme/
-*.DS_Store
-
