@@ -5,7 +5,7 @@ from python_files.containers import Stack, Prio_queue, Queue
 
 # node class, that holds information about the state, its  
 class Node:
-    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0,action=set()):
+    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0,action=list()):
         self.state = state
         self.gx = goal_cost
         self.hx = heuristic_cost
@@ -120,38 +120,42 @@ class WolfGoatCabbage(Problem):
             start = left
         else:
             start = right
-        actions.append({"Farmer", None})           # add all actions including farmer goes alone
+        direction = "Right" if start == left else "Left"
+        actions.append(({"Farmer", None}, direction))           # add all actions including farmer goes alone
         for item in start:
             if item != "Farmer":
-                actions.append({"Farmer",item})
-        return actions                             # return all possible actions
+                actions.append(({"Farmer", item}, direction))
+        return actions                        # return all possible actions
     
     def result(self, state, action):
         """
         Return the state that results from executing the given action in the given state.
         """
-        left,right = copy.deepcopy(state)   # make deepcopy of current state
+        new_state = copy.deepcopy(state)   # make deepcopy of current state
+        left, right = new_state
         new_left = set(left)                # convert tuple to mutable set
         new_right = set(right)              # convert tuple to mutable set
+        act, direction = action
         if "Farmer" in left:                # check which bank of the river the farmer is currently on
             new_left.remove("Farmer")       # move the farmer
             new_right.add("Farmer")
-            for item in action:                 # now move the item specified in the action, which is not the farmer
+            for item in act:                 # now move the item specified in the action, which is not the farmer
                 if item and item != "Farmer":
                     new_left.remove(item)   
                     new_right.add(item)           
         else:
             new_right.remove("Farmer")          # move the farmer
             new_left.add("Farmer")        
-            for item in action:
+            for item in act:
                 if item and item != "Farmer":   # now move the item specified in the action, which is not the farmer
                     new_right.remove(item)
                     new_left.add(item)
-        new_left_F, new_right_F = sorted(tuple(new_left)), sorted(tuple(new_right))         # convert sets back to immutable tuples
-        if self.is_valid_state((new_left_F,new_right_F)):                   # check if new state is valid
-            return new_left_F,new_right_F                                   # return new state if valid else return current state
+        new_left_F, new_right_F = sorted(tuple(new_left)), sorted(tuple(new_right))      # convert sets back to immutable tuples
+        new_state = (new_left_F,new_right_F)
+        if self.is_valid_state(new_state):                   # check if new state is valid
+            return new_state, act, direction                             # return new state if valid else return current state
         else:
-            return state
+            return state, act, direction
     
     def display_state(self, state):
         """ 

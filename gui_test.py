@@ -144,7 +144,7 @@ class GUI(CTk):
         self.result_of_solution.grid(row=0, column=2, columnspan=2, padx=(2.5,2.5), pady=5)
         
         self.stop_search = False
-        self.game_on = True
+        self.game_on = False
         
         self.numbers_left = [0,1,2,3,4,5,6,7,8]
         self.numbers_entered = []        
@@ -168,12 +168,14 @@ class GUI(CTk):
         self.solution_progress.set(0)
         
     """
-    Window for errors
+    
+    HELPER FUNCTIONS FOR UI
+    
     """    
     # Destroy error window
     def error_window_destroy(self):
         self.error.destroy()
-        self.reset_board()
+        self.reset_eight_puzzle()
            
     # Return center point of main window adjusting to where it currently is
     def error_popup_loc(self):
@@ -201,20 +203,106 @@ class GUI(CTk):
             widget.destroy()
         for widget in self.solution_frame.winfo_children():
             widget.destroy()
-            
-        self.after(100, lambda: self.init_states())
+        self.init_states()
 
     """
-    HELPER METHODS FOR WOLF, GOAT and CABBAGE
+    
+    
+    WOLF GOAT AND CABBAGE PROBLEM
+    
+    
     """
+    # Init WGC Problem
     def init_wolfgoatcabbage(self):
-        self.after(0, lambda : self.banner.configure(text="Loading EightPuzzle"))
+        self.init_states()
+        self.solution_action.configure(font=(None, 20), text="Press Solve")
         
-        setup_thread = threading.Thread(target=self.WolfGoatCabbage_gui)        
-        setup_thread.start()
+        self.after(10, lambda: self.WolfGoatCabbage_gui())
         
+        self.x_left = 0.85
+        self.x_right = 0.15
+    
     def solve_wolfgoatcabbage(self):
-        pass
+        self.progress = 0
+        self.text_size = 10
+        self.stop_search = False
+        self.solution_action.configure(font=(None, 20), text="Press Solve")
+        
+        self.solution_progress.set(self.progress)
+        self.solution_progress.grid(row=3, column=0, padx=5, pady=2.5)
+        
+        problem = WolfGoatCabbage((sorted(tuple({"Cabbage", "Farmer","Goat","Wolf"})),sorted(tuple())))
+        solver = Search_Algorithms(problem)
+        get_algorithm = self.selected_algorithm.get()           # Get the StringVar from the radiobuttons. 
+        assign_algorithm = getattr(solver, get_algorithm, None) # Match the StringVar with the algorithm method in ./Python_files/Algorithms.py
+        result = assign_algorithm()                             # Return result (final node)
+        solution = problem.reverse_steps(result)                # Return a list with initial state to goal state
+        actions = problem.reverse_actions(result)               # Return a list with actions based on the empty tile
+        actions.append(("", {None,"Finished"}))
+
+        self.after(1000, lambda: self.update_state_wgc(solution, actions))
+        self.after(0, lambda: self.result_of_solution.configure(text=f"Path Length: {len(solution)}    Nodes Explored: {result.explored}"))
+        self.after(0, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
+        
+    def move_characters(self,state, direction, x):
+        if direction == "Left":
+            if x > 0.15:
+                x -= 0.005
+                state.place(relx=x)
+                self.after(5, lambda: self.move_characters(state,direction,x))
+        else:
+            if x < 0.85:
+                x += 0.005
+                state.place(relx=x)
+                self.after(5, lambda: self.move_characters(state,direction,x))
+   
+    def update_state_wgc(self, solution, actions, step_index=0):
+        if step_index >=len(solution) or self.stop_search == True:
+            return
+        
+        time = 1500
+        step = solution[step_index] # init current state   
+        action = actions[step_index+1] # init action to current state
+
+        direction, act  = action
+        for i in range(len(self.solution_representation)):
+            if "Farmer" in act and i == 0:
+                if direction == "Left":
+                    self.move_characters(self.solution_representation[i], "Left", 0.85)
+                else:
+                    self.move_characters(self.solution_representation[i], "Right", 0.15)
+            if "Wolf" in act and i == 1:
+                if direction == "Left":
+                    self.move_characters(self.solution_representation[i], "Left", 0.85)
+                else:
+                    self.move_characters(self.solution_representation[i], "Right", 0.15)       
+            if "Goat" in act and i == 2:
+                if direction == "Left":
+                    self.move_characters(self.solution_representation[i], "Left", 0.85)
+                else:
+                    self.move_characters(self.solution_representation[i], "Right", 0.15)         
+            if "Cabbage" in act and i == 3:
+                if direction == "Left":
+                    self.move_characters(self.solution_representation[i], "Left", 0.85)
+                else:
+                    self.move_characters(self.solution_representation[i], "Right", 0.15)
+            left,right=act
+            self.x_right = 0.15
+            self.x_left = 0.85
+            if None in act:
+                not_none = left if left != None else right
+                self.solution_action.configure(text=f"{not_none}\n"
+                                                    f"{direction}")
+            else:
+                self.solution_action.configure(text=f"{left} & {right}\n"
+                                                    f"{direction}")
+        self.expand(action,10,30)
+        self.text_size = 10
+                 
+        self.after(time, lambda: self.update_state_wgc(solution,actions, step_index + 1))
+    
+    def reset_wcg_puzzle(self):
+        pass   
         
     """
     SETTING UP THE WOLF, GOAT and CABBAGE UI
@@ -226,7 +314,7 @@ class GUI(CTk):
         if self.game_on == True:
             self.reset_frames()
         self.game_on = True
-        self.reset_button.configure(command=self.reset_board)
+        self.reset_button.configure(command=self.reset_wcg_puzzle)
         self.solve_button.configure(command=self.solve_wolfgoatcabbage)
         
         """
@@ -263,21 +351,21 @@ class GUI(CTk):
         
         Returns list with widgets for Eight Puzzle board - input, goal and solution.
         """
-        def create_board(type="", label_width=60, label_height=40, font_size=14):
+        def create_board(type="", label_width=60, label_height=20, font_size=14):
             widget_list =[]
             character = ["Farmer","Wolf","Goat","Cabbage"]
             y_loc = 0.1
             for i in range(4):
                 if type == "initial":
                     new_widget = CTkLabel(self.initial_frame_puzzle, width=label_width, height=label_height, 
-                                          text=character[i], fg_color="transparent")
+                                          text=character[i], fg_color="black", corner_radius=10)
                     new_widget.place(relx=0.15, rely=y_loc,anchor=CENTER)
                 if type == "goal_labels":
-                    new_widget = CTkLabel(self.goal_frame_puzzle, width=label_width, height=label_height, text=character[i])
+                    new_widget = CTkLabel(self.goal_frame_puzzle, width=label_width, height=label_height, text=character[i], fg_color="black", corner_radius=10)
                     new_widget.place(relx=0.85, rely=y_loc,anchor=CENTER)
                     
                 if type == "solution_labels":
-                    new_widget = CTkLabel(self.solution_frame_output, width=60, height=30, text=character[i], font=(None, 18))
+                    new_widget = CTkLabel(self.solution_frame_output, width=60, height=30, text=character[i], font=(None, 18), fg_color="black", corner_radius=10)
                     new_widget.place(relx=0.15, rely=y_loc,anchor=CENTER)
                     
                 y_loc += 0.25
@@ -292,14 +380,21 @@ class GUI(CTk):
         self.solution_representation = create_board("solution_labels", 50,40)
         self.solution_action.configure(text="Waiting for input")
             
+    
+    
     """
-    METHODS FOR EIGTH PUZZLE
+    
+    
+    EIGHT PUZZLE PROBLEM
+    
+    
     """
+    
     # Init Eight Puzzle
     def init_EightPuzzle(self):
-        self.banner.configure(text="Loading EightPuzzle")
-        setup_thread = threading.Thread(target=self.EightPuzzle_gui)        
-        setup_thread.start()
+        self.init_states()
+        self.after(10, lambda: self.EightPuzzle_gui())
+
         self.numbers_left = [0,1,2,3,4,5,6,7,8]
         self.numbers_entered = []       
     
@@ -325,7 +420,7 @@ class GUI(CTk):
         self.numbers_left.remove(int(P))
         self.numbers_entered.append(int(P))
         if len(self.numbers_entered)==6:
-            self.after(150, lambda: self.auto_fill_last_three())
+            self.after(50, lambda: self.auto_fill_last_three())
         return True
     
     # Fills in the last three entries to make the puzzle solvable.
@@ -353,7 +448,7 @@ class GUI(CTk):
                 idx += 1
             
     # Reset entries and search if ongoing
-    def reset_board(self):
+    def reset_eight_puzzle(self):
         for row_entries in self.entries:
             for entry in (row_entries):
                 self.after(1, entry.configure(validate="none"))
@@ -406,13 +501,14 @@ class GUI(CTk):
         self.after(time, lambda : self.update_state_eightpuzzle(solution, actions, step_index+1)) # Iterate through solution
 
     # Expand animation effect
-    def expand(self, action):
-        if self.text_size < 50:
+    def expand(self, action, start_size=30,size=50):
+        if self.text_size < size:
             self.text_size += 0.5
+            test = self.text_size
             self.solution_action.configure(font=(None, self.text_size))
-            self.after(5, lambda: self.expand(action))
+            self.after(5, lambda: self.expand(action,start_size, size))
         else:
-            self.text_size = 30
+            self.text_size = start_size
 
     # Return True or False if user input puzzle is unsolvable
     def inversion_counter(self,array):
@@ -488,7 +584,7 @@ class GUI(CTk):
         if self.game_on:
             self.reset_frames()
         self.game_on = True
-        self.reset_button.configure(command=self.reset_board)
+        self.reset_button.configure(command=self.reset_eight_puzzle)
         self.solve_button.configure(command=self.solve_eightpuzzle)
 
         """

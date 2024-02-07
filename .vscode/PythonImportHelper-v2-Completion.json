@@ -199,7 +199,7 @@
         "kind": 6,
         "importPath": "python_files.algorithms",
         "description": "python_files.algorithms",
-        "peekOfCode": "class Node:\n    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0,action=set()):\n        self.state = state\n        self.gx = goal_cost\n        self.hx = heuristic_cost\n        self.parent = parent\n        self.depth = depth\n        self.explored = explored\n        self.action = action\n    def __repr__(self):",
+        "peekOfCode": "class Node:\n    def __init__(self,state,goal_cost=0,heuristic_cost=0, parent=None, depth=0, explored=0,action=list()):\n        self.state = state\n        self.gx = goal_cost\n        self.hx = heuristic_cost\n        self.parent = parent\n        self.depth = depth\n        self.explored = explored\n        self.action = action\n    def __repr__(self):",
         "detail": "python_files.algorithms",
         "documentation": {}
     },
