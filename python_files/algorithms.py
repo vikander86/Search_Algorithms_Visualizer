@@ -226,10 +226,10 @@ class EightProblem(Problem):
         Return the list of actions that can be executed in the given state.
         """
         possible_actions = [] # init empty set
-        moves = {(1,0):"Right",
-                 (0,1):"Down",
-                 (-1,0):"Left",
-                 (0,-1):"Up"}
+        moves = {(1,0):"left",
+                 (0,1):"up",
+                 (-1,0):"right",
+                 (0,-1):"down"}
         x,y = self.find_zero(state)
         
         for move, action in moves.items():
@@ -247,8 +247,9 @@ class EightProblem(Problem):
         x, y, action_description = action 
         zero_x, zero_y = self.find_zero(state)
         new_state = copy.deepcopy(state)
+        tile = new_state[x][y] 
         new_state[zero_x][zero_y], new_state[x][y] = new_state[x][y], new_state[zero_x][zero_y]
-        return new_state, action_description
+        return new_state, action_description, tile
     
     def heuristic(self, state):
         """ 
@@ -284,11 +285,11 @@ class Search_Algorithms:
                 # return self.problem.reverse_steps(current_node)
             
             for action in self.problem.actions(current_node.state):
-                new_state, action_description = self.problem.result(current_node.state, action)
+                new_state, action_description, tile= self.problem.result(current_node.state, action)
                 if tuple(map(tuple, new_state)) not in visited:
                     g_cost = current_node.gx + 1 if cost else 0
                     h_cost = self.problem.heuristic(new_state) if heuristic else 0
-                    new_node = Node(state=new_state, goal_cost=g_cost, heuristic_cost=h_cost, parent=current_node, action=action_description)
+                    new_node = Node(state=new_state, goal_cost=g_cost, heuristic_cost=h_cost, parent=current_node, action=(tile,action_description))
                     frontier.enqueue(new_node)
                     visited.add(tuple(map(tuple, new_state)))
     
@@ -337,6 +338,4 @@ class Search_Algorithms:
 
     def Astar_search_algorithm(self):
         return self.Search_algorithm(queue=Prio_queue,heuristic=True, cost=True)
-      
-
 

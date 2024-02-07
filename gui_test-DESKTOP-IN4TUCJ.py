@@ -2,8 +2,7 @@ from tkinter import *
 from customtkinter import *
 from python_files.algorithms import *
 from python_files.containers import *
-from PIL import Image
-from itertools import permutations
+from PIL import Image, ImageTk
 import threading
 
 theme_path = "theme/Hades.json"
@@ -36,7 +35,7 @@ class GUI(CTk):
         """
         top_frame = CTkFrame(self,corner_radius=0)
         top_frame.grid(row = 0, column=0, columnspan=5, sticky="nsew")
-        top_frame.grid_columnconfigure((0,1,2,3,4), weight=1, uniform="a")
+        top_frame.grid_columnconfigure((0,1,2,3,4), weight=1)
         top_frame.grid_rowconfigure(0,weight=1, uniform="a")
         
         left_frame = CTkFrame(self, corner_radius=50)
@@ -72,7 +71,7 @@ class GUI(CTk):
         self.initial_frame = CTkFrame(display_frame)
         self.initial_frame.grid(row=1, column=0, sticky="nswe")
         self.initial_frame.grid_rowconfigure(0, weight=1, uniform="a")
-        self.initial_frame.grid_rowconfigure(1, weight=6, uniform="a")
+        self.initial_frame.grid_rowconfigure(1, weight=5, uniform="a")
         self.initial_frame.grid_columnconfigure(0, weight=1, uniform="a")
 
         
@@ -80,14 +79,14 @@ class GUI(CTk):
         self.goal_frame = CTkFrame(display_frame)
         self.goal_frame.grid(row=2, column=0, sticky="nswe")
         self.goal_frame.grid_rowconfigure(0, weight=1, uniform="a")
-        self.goal_frame.grid_rowconfigure(1, weight=6, uniform="a")
+        self.goal_frame.grid_rowconfigure(1, weight=5, uniform="a")
         self.goal_frame.grid_columnconfigure(0, weight=1, uniform="a")
         
         # initialize solution frame
         self.solution_frame = CTkFrame(display_frame)
         self.solution_frame.grid(row=1, rowspan=2, column=1, sticky="nswe")
         self.solution_frame.grid_rowconfigure(0, weight=1, uniform="a")
-        self.solution_frame.grid_rowconfigure(1, weight=4, uniform="a")
+        self.solution_frame.grid_rowconfigure(1, weight=3, uniform="a")
         self.solution_frame.grid_rowconfigure(2, weight=1, uniform="a")
         self.solution_frame.grid_rowconfigure(3, weight=1, uniform="a")
         self.solution_frame.grid_columnconfigure(0, weight=1, uniform="a")
@@ -143,15 +142,10 @@ class GUI(CTk):
         self.result_of_solution = CTkLabel(result_frame, text="")
         self.result_of_solution.grid(row=0, column=2, columnspan=2, padx=(2.5,2.5), pady=5)
         
-        self.stop_search = False
-        self.game_on = True
+        """
+        INITIAL STATE, GOAL STATE, SOLUTION
+        """
         
-        self.numbers_left = [0,1,2,3,4,5,6,7,8]
-        self.numbers_entered = []        
-    """
-    INITIAL STATE, GOAL STATE, SOLUTION
-    """
-    def init_states(self):  
         self.initial_state_text = CTkLabel(self.initial_frame, text="Initial State", fg_color="transparent", font=("Consolas", 14))
         self.initial_state_text.grid(row=0, column=0, sticky="nwe", padx=5, pady=5)
         
@@ -166,6 +160,8 @@ class GUI(CTk):
         
         self.solution_progress = CTkProgressBar(self.solution_frame, orientation="horizontal", height=20, width=300)
         self.solution_progress.set(0)
+        
+        self.stop_search = False
         
     """
     Window for errors
@@ -194,21 +190,11 @@ class GUI(CTk):
         self.destroy()
         exit()
         
-    def reset_frames(self):
-        for widget in self.initial_frame.winfo_children():
-            widget.destroy()
-        for widget in self.goal_frame.winfo_children():
-            widget.destroy()
-        for widget in self.solution_frame.winfo_children():
-            widget.destroy()
-            
-        self.after(100, lambda: self.init_states())
-
     """
     HELPER METHODS FOR WOLF, GOAT and CABBAGE
     """
     def init_wolfgoatcabbage(self):
-        self.after(0, lambda : self.banner.configure(text="Loading EightPuzzle"))
+        self.banner.configure(text="Loading EightPuzzle")
         
         setup_thread = threading.Thread(target=self.WolfGoatCabbage_gui)        
         setup_thread.start()
@@ -223,9 +209,6 @@ class GUI(CTk):
         """
         Initialize buttons - solve and reset
         """
-        if self.game_on == True:
-            self.reset_frames()
-        self.game_on = True
         self.reset_button.configure(command=self.reset_board)
         self.solve_button.configure(command=self.solve_wolfgoatcabbage)
         
@@ -243,13 +226,15 @@ class GUI(CTk):
         
         Return a frame with specific configurations for the Eight Puzzle
         """
-        def frame_builder(parent_frame,image_size=(150,220), placement=0.5):
+        def frame_builder(parent_frame,image_size=(140,215)):
             river_bg = CTkImage(light_image=Image.open(r"img\bg_wgc.png"), size=image_size)
-            frame = CTkFrame(parent_frame,height = 200, width=275,border_width=0, fg_color="transparent")
-            frame.place(relx=0.5, rely=placement, anchor="center")
+            frame = CTkFrame(parent_frame, border_width=0, fg_color="transparent")
+            frame.grid(row=1, column=0, sticky="nswe", padx=5, pady=5)
+            frame.grid_rowconfigure((0,1,2,3), weight=1, uniform="a")
+            frame.grid_columnconfigure(1, weight=1, uniform="a")
             
             background_label = CTkLabel(frame, image=river_bg, text="")
-            background_label.place(relx=0.5, rely=0.5, anchor="center")
+            background_label.place(x=0, y=0, relwidth=1, relheight=1)
             return frame
         
         """
@@ -257,51 +242,48 @@ class GUI(CTk):
         """
         self.initial_frame_puzzle = frame_builder(self.initial_frame)
         self.goal_frame_puzzle = frame_builder(self.goal_frame)
-        self.solution_frame_output = frame_builder(self.solution_frame, (140,250),0.4)
+        self.solution_frame_output = frame_builder(self.solution_frame, (140,250))
         """
         WIDGET instantiation
         
         Returns list with widgets for Eight Puzzle board - input, goal and solution.
         """
-        def create_board(type="", label_width=60, label_height=40, font_size=14):
+        def create_board(type="", label_width=40, label_height=20, font_size=14):
             widget_list =[]
             character = ["Farmer","Wolf","Goat","Cabbage"]
-            y_loc = 0.1
+            y_loc = 20
             for i in range(4):
-                if type == "initial":
-                    new_widget = CTkLabel(self.initial_frame_puzzle, width=label_width, height=label_height, 
-                                          text=character[i], fg_color="transparent")
-                    new_widget.place(relx=0.15, rely=y_loc,anchor=CENTER)
+                if type == "entries":
+                    new_widget = CTkLabel(self.initial_frame_puzzle, width=label_width, height=label_height, text=character[i])
+                    new_widget.pack(x=20, y=y_loc)
                 if type == "goal_labels":
                     new_widget = CTkLabel(self.goal_frame_puzzle, width=label_width, height=label_height, text=character[i])
-                    new_widget.place(relx=0.85, rely=y_loc,anchor=CENTER)
-                    
                 if type == "solution_labels":
-                    new_widget = CTkLabel(self.solution_frame_output, width=60, height=30, text=character[i], font=(None, 18))
-                    new_widget.place(relx=0.15, rely=y_loc,anchor=CENTER)
-                    
-                y_loc += 0.25
+                    new_widget = CTkLabel(self.solution_frame_output, width=60, height=30, text="")
+                y_loc += 20
                 widget_list.append(new_widget)
             return widget_list
                
+      
         """
         Call functions set up problem
         """
-        self.initial_state = create_board("initial")
-        self.goal_representation = create_board("goal_labels")
-        self.solution_representation = create_board("solution_labels", 50,40)
-        self.solution_action.configure(text="Waiting for input")
-            
+        self.entries = create_board("entries")
+        # self.goal_representation = create_board("goal_labels")
+        # self.solution_representation = create_board("solution_labels", 50,40)
+        # self.solution_action.configure(text="Waiting for input")
+        # self.validate_eightpuzzle_input()        
+        
+        
     """
     METHODS FOR EIGTH PUZZLE
     """
     # Init Eight Puzzle
     def init_EightPuzzle(self):
         self.banner.configure(text="Loading EightPuzzle")
+        
         setup_thread = threading.Thread(target=self.EightPuzzle_gui)        
         setup_thread.start()
-        self.numbers_left = [0,1,2,3,4,5,6,7,8]
-        self.numbers_entered = []       
     
     # Validatate user entries
     def validate_eightpuzzle_input(self):
@@ -311,10 +293,12 @@ class GUI(CTk):
                 validate_cmd = (self.register(lambda P, i=i, j=j: self.callback(P, i, j)), "%P")
                 entry.configure(validate='key', validatecommand=validate_cmd)
     
+    
     def callback(self, P, row, col):
         # Return if input is not a digit, a sequence, or the number 9
         if not P.isdigit() or len(P) > 1 or P == "9":
             return False
+        
         # Check if input already exists
         for i, row_entries in enumerate(self.entries):
             for j, entry in enumerate(row_entries):
@@ -322,51 +306,20 @@ class GUI(CTk):
                     continue  # Skip the entry field
                 if entry.get() == P:
                     return False  # Return if duplicate found
-        self.numbers_left.remove(int(P))
-        self.numbers_entered.append(int(P))
-        if len(self.numbers_entered)==6:
-            self.after(150, lambda: self.auto_fill_last_three())
         return True
     
-    # Fills in the last three entries to make the puzzle solvable.
-    def auto_fill_last_three(self):
-        entry_array = [int(entry.get()) if entry.get() else "empty" for row in self.entries for entry in row]
-        arrays = list(permutations(self.numbers_left, 3))  
-        for array in arrays:
-            count = 3
-            while count > 0:
-                for i in range(len(array)):
-                    for j in range(len(entry_array)):
-                        if entry_array[j] == "empty":
-                            entry_array[j] = int(array[i])
-                            break
-                    count -= 1
-            if self.inversion_counter(entry_array):
-                break
-            entry_array = [int(entry.get()) if entry.get() else "empty" for row in self.entries for entry in row]
-        idx = 0  
-        for i, row in enumerate(self.entries):
-            for j, entry in enumerate(row):
-                entry.configure(validate="none")
-                entry.delete(0, "end")
-                entry.insert(0, int(entry_array[idx]))
-                idx += 1
-            
     # Reset entries and search if ongoing
     def reset_board(self):
         for row_entries in self.entries:
             for entry in (row_entries):
-                self.after(1, entry.configure(validate="none"))
-                self.after(2, entry.delete(0,"end"))
-                self.after(3,entry.configure(validate="all", validatecommand=NONE))
+                entry.configure(validate="none")
+                entry.delete(0,"end")
+                entry.configure(validate="all")
         for row_label in self.solution_representation:
             for label in row_label:
                 label.configure(text="")
-        self.numbers_left = [0,1,2,3,4,5,6,7,8]
-        self.numbers_entered = []
         self.solution_action.configure(font=(None, 25), text="Waiting for input")
         self.solution_progress.set(0)
-        self.validate_eightpuzzle_input()
         self.stop_search = True
 
     # Iterate through solution and update solution labels
@@ -416,28 +369,19 @@ class GUI(CTk):
 
     # Return True or False if user input puzzle is unsolvable
     def inversion_counter(self,array):
-        length=len(array)
-        number_of_inversion=0
-        if len(array) == 3: # If matrix remake as list
-            redo_array = [number for row in array for number in row]
-        else:
-            redo_array=array
-            
-        number_of_inversion = sum(1 for i in range(length) for j in range(i+1, length)
-                                  if 0 not in (redo_array[i],redo_array[j])
-                                  and redo_array[i] > redo_array[j])
+        number_of_inversion = 0
+        redo_array = []
+        for row in array:
+            for number in row:
+                redo_array.append(number)
+        for i in range(len(redo_array)):
+            for j in range(i+1,len(redo_array)):
+                if redo_array[j] == 0 or redo_array[i] == 0:
+                    continue
+                elif redo_array[i] > redo_array[j]:
+                    number_of_inversion += 1
         return True if number_of_inversion % 2 == 0 else False
-    
-    def turn_matrix(self):
-        array = []
-        for row in self.entries:
-            row_list = []
-            for column in row:
-                number = column.get()
-                row_list.append(int(number))
-            array.append(row_list)
-        return array
-       
+        
     # Initiate the solve
     def solve_eightpuzzle(self):
         self.progress = 0
@@ -449,8 +393,14 @@ class GUI(CTk):
         self.solution_progress.grid(row=3, column=0, padx=5, pady=2.5)
 
         # Get user input
-        array = self.turn_matrix()
-
+        array = []
+        for row in self.entries:
+            row_list = []
+            for column in row:
+                number = column.get()
+                row_list.append(int(number))
+            array.append(row_list)
+        
         if self.inversion_counter(array): # If solvable
             # Setting up the Eight Puzzle problem
             problem = EightProblem(array)
@@ -467,7 +417,7 @@ class GUI(CTk):
             self.after(0, lambda: self.result_of_solution.configure(text=f"Path Length: {len(solution)}    Nodes Explored: {result.explored}"))
             self.after(0, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
         else:
-            # Code obselete since auto_fill_last_three() makes sure no puzzle input are unsolvable
+            # maybe refractor this to a function
             center_x, center_y = self.error_popup_loc()
             self.error = CTkToplevel(self)
             self.error.title("Error")
@@ -485,19 +435,13 @@ class GUI(CTk):
         """
         Initialize buttons - solve and reset
         """
-        if self.game_on:
-            self.reset_frames()
-        self.game_on = True
         self.reset_button.configure(command=self.reset_board)
         self.solve_button.configure(command=self.solve_eightpuzzle)
 
         """
         Banner change
         """
-        self.banner.configure(text="The Eight Puzzle.\n"
-                                    "Type in integers between 0-8 (0 representing the empty tile)."
-                                    "\nIt will auto place the last three digits to be solvable.\n"
-                                    "Press solve to see magic.")
+        self.banner.configure(text="The Eight Puzzle.\nType in integers between 0-8 (0 representing the empty tile).\nPress solve to see magic.")
         
         """
         FRAME instantiation
