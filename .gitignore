@@ -4,7 +4,6 @@ myenv/
 *.so
 *.spec
 /tempCodeRunnerFile.py
-
 *.DS_Store
 /build/
 /dist/

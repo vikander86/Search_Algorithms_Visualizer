@@ -71,18 +71,18 @@ class Search_Algorithms:
             limit += 1
         return solution
     
-    def BFS_algorithm(self):
+    def BFS(self):
         return self.Search_algorithm()       
         
-    def DFS_algorithm(self):
+    def DFS(self):
         return self.Search_algorithm(queue=Stack)
 
-    def UFC_algorithm(self):
+    def UFC(self):
         return self.Search_algorithm(queue=Prio_queue,heuristic=False, cost=True)
 
-    def BeFE_algorithm(self):
+    def BeFE(self):
         return self.Search_algorithm(queue=Prio_queue,heuristic=True, cost=False)
 
-    def Astar_search_algorithm(self):
+    def Astar(self):
         return self.Search_algorithm(queue=Prio_queue,heuristic=True, cost=True)
 

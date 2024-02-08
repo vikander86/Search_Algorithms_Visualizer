@@ -1,7 +1,8 @@
 from tkinter import *
 from customtkinter import *
 from algorithms import *
-from problems import *
+from problems import EightPuzzle,WolfGoatCabbage
+from utils import  Node
 from PIL import Image
 from itertools import permutations
 import threading
@@ -99,14 +100,14 @@ class GUI(CTk):
         """
         
         # Variable to store radio button press
-        self.selected_algorithm = StringVar(value="BFS_algorithm")
+        self.selected_algorithm = StringVar(value="BFS")
         
         # Buttons for each of the algorithms included
-        self.radio_button_BFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="BFS_algorithm", text="Breadth First Search",font=("Consolas", 12))
-        self.radio_button_DFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="DFS_algorithm", text="Depth First Search",font=("Consolas", 12))
-        self.radio_button_UFC = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="UFC_algorithm", text="Uniform Cost Search",font=("Consolas", 12))
-        self.radio_button_BeFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="BeFE_algorithm", text="Best First Search",font=("Consolas", 12))
-        self.radio_button_astar = CTkRadioButton(left_frame, variable=self.selected_algorithm, value="Astar_search_algorithm", text="A* Search",font=("Consolas", 12))
+        self.radio_button_BFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="BFS", text="Breadth First Search",font=("Consolas", 12))
+        self.radio_button_DFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="DFS", text="Depth First Search",font=("Consolas", 12))
+        self.radio_button_UFC = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="UFC", text="Uniform Cost Search",font=("Consolas", 12))
+        self.radio_button_BeFS = CTkRadioButton(left_frame,variable=self.selected_algorithm, value="BeFE", text="Best First Search",font=("Consolas", 12))
+        self.radio_button_astar = CTkRadioButton(left_frame, variable=self.selected_algorithm, value="Astar", text="A* Search",font=("Consolas", 12))
         self.radio_button_BFS.grid(row=0, column=0, padx=10, sticky="w")
         self.radio_button_DFS.grid(row=1, column=0, padx=10, sticky="w")
         self.radio_button_UFC.grid(row=2, column=0, padx=10, sticky="w")
