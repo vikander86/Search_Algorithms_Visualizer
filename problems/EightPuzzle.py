@@ -13,7 +13,7 @@ class EightPuzzle(Problem):
         self.width = 3
 
     def __repr__(self):
-        return "------Eight Puzzle problem------"
+        return "Eight Puzzle problem"
 
     def tile_location(self, tile):
         """

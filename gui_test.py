@@ -223,7 +223,6 @@ class GUI(CTk):
         self.x_right = 0.15
     
     def solve_wolfgoatcabbage(self):
-        self.progress = 0
         self.text_size = 10
         self.stop_search = False
         self.solution_action.configure(font=(None, 20), text="Press Solve")
@@ -241,8 +240,8 @@ class GUI(CTk):
         actions.append(("", {None,"Finished"}))
 
         self.after(1000, lambda: self.update_state_wgc(solution, actions))
-        self.after(0, lambda: self.result_of_solution.configure(text=f"Path Length: {len(solution)}    Nodes Explored: {result.explored}"))
-        self.after(0, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
+        # self.after(0, lambda: self.result_of_solution.configure(text=f"Path Length: {len(solution)-1}    Nodes Explored: {result.explored - 1}"))
+        # self.after(0, lambda: self.solution_banner.configure(text=f"Solution\n\n{get_algorithm}"))
         
     def move_characters(self,state, direction, x):
         if direction == "Left":
@@ -330,7 +329,7 @@ class GUI(CTk):
         """
         FRAME instantiation
         
-        Return a frame with specific configurations for the Eight Puzzle
+        Return a frame with specific configurations for the Wolf Goat and Cabbage problem
         """
         def frame_builder(parent_frame,image_size=(150,220), placement=0.5):
             river_bg = CTkImage(light_image=Image.open(bg_wcg_image_path), size=image_size)
@@ -471,7 +470,7 @@ class GUI(CTk):
         if step_index >=len(solution) or self.stop_search == True:
             return
         
-        time = 1000 if self.selected_algorithm.get() != "DFS_algorithm" else 1 # Set time 1000ms, unless Depth First Search
+        time = 1000 if self.selected_algorithm.get() != "DFS" else 1 # Set time 1000ms, unless Depth First Search
         step = solution[step_index] # init current state   
         action = actions[step_index + 1] # init action to current state
 
@@ -479,7 +478,7 @@ class GUI(CTk):
         for i, row in enumerate(self.solution_representation):
             for j, label in enumerate(row):
                 label.configure(text=f"{step[i][j]}" if step[i][j] != 0 else "") # Allow for empty space instead of empty string
-        if self.selected_algorithm.get() != "DFS_algorithm": # Print performed action on given tile
+        if self.selected_algorithm.get() != "DFS": # Print performed action on given tile
             if len(action) == 2:
                 tile, move = action
                 self.solution_action.configure(text=f"{tile} {move}")

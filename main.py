@@ -1,49 +1,19 @@
 # main.py
 from controller import AppController
-
+from customtkinter import CTk
 def main():
     app = AppController()
+    app.init_start_up()
     app.run()
 
 if __name__ == '__main__':
     main() 
 
         # """"
-#         DISPLAY FRAME: Displaying results and ... stuff?
-#         """
-#         # initialize a banner frame
-#         banner_frame = CTkFrame(display_frame)
-#         banner_frame.grid(row=0,column=0,columnspan=2,sticky="nswe")
-#         banner_frame.grid_rowconfigure(0, weight=1, uniform="a")
-#         banner_frame.grid_columnconfigure(0, weight=1, uniform="a")
-        
-#         # Descriptive text about current problem
-#         self.banner = CTkLabel(banner_frame, text="Hey there!\nChoose a problem.", font=("Consolas", 14))
-#         self.banner.grid(row=0, column=0, padx=5, sticky="we")
-        
-#         # initialize "initial state" frame
-#         self.initial_frame = CTkFrame(display_frame)
-#         self.initial_frame.grid(row=1, column=0, sticky="nswe")
-#         self.initial_frame.grid_rowconfigure(0, weight=1, uniform="a")
-#         self.initial_frame.grid_rowconfigure(1, weight=6, uniform="a")
-#         self.initial_frame.grid_columnconfigure(0, weight=1, uniform="a")
+
 
         
-#         # initialize "goal state" frame
-#         self.goal_frame = CTkFrame(display_frame)
-#         self.goal_frame.grid(row=2, column=0, sticky="nswe")
-#         self.goal_frame.grid_rowconfigure(0, weight=1, uniform="a")
-#         self.goal_frame.grid_rowconfigure(1, weight=6, uniform="a")
-#         self.goal_frame.grid_columnconfigure(0, weight=1, uniform="a")
-        
-#         # initialize solution frame
-#         self.solution_frame = CTkFrame(display_frame)
-#         self.solution_frame.grid(row=1, rowspan=2, column=1, sticky="nswe")
-#         self.solution_frame.grid_rowconfigure(0, weight=1, uniform="a")
-#         self.solution_frame.grid_rowconfigure(1, weight=4, uniform="a")
-#         self.solution_frame.grid_rowconfigure(2, weight=1, uniform="a")
-#         self.solution_frame.grid_rowconfigure(3, weight=1, uniform="a")
-#         self.solution_frame.grid_columnconfigure(0, weight=1, uniform="a")
+
         
 #         self.solution_representation = []
         

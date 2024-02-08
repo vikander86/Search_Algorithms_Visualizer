@@ -9,11 +9,13 @@ class WolfGoatCabbage(Problem):
     
     The problem is seperated in two sets, left and right, to illustrate the left and right bank of the river.
     """
-    def __init__(self, initial_state, goal_state=Node((sorted(tuple()),sorted(tuple({"Cabbage", "Farmer","Goat","Wolf"}))))):
-        super().__init__(Node(initial_state), goal_state)
+    def __init__(self, 
+                 initial_state=Node((sorted(tuple({"Cabbage", "Farmer","Goat","Wolf"})),sorted(tuple()))), 
+                 goal_state=Node((sorted(tuple()),sorted(tuple({"Cabbage", "Farmer","Goat","Wolf"}))))):
+        super().__init__(initial_state, goal_state)
     
     def __repr__(self):
-        return "------Wolf Goat Cabbage problem------"
+        return "Wolf Goat Cabbage problem"
     
     def is_valid_state(self, state):
         """ 

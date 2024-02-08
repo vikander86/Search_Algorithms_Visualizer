@@ -73,7 +73,7 @@
         "documentation": {}
     },
     {
-        "label": "search",
+        "label": "Search_Algorithms",
         "importPath": "algorithms",
         "description": "algorithms",
         "isExtraImport": true,
@@ -243,11 +243,11 @@
         "documentation": {}
     },
     {
-        "label": "*",
-        "importPath": "tkinter",
-        "description": "tkinter",
+        "label": "CTk",
+        "importPath": "customtkinter",
+        "description": "customtkinter",
         "isExtraImport": true,
-        "detail": "tkinter",
+        "detail": "customtkinter",
         "documentation": {}
     },
     {
@@ -256,6 +256,22 @@
         "description": "PIL",
         "isExtraImport": true,
         "detail": "PIL",
+        "documentation": {}
+    },
+    {
+        "label": "Image",
+        "importPath": "PIL",
+        "description": "PIL",
+        "isExtraImport": true,
+        "detail": "PIL",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
         "documentation": {}
     },
     {
@@ -325,7 +341,7 @@
         "kind": 6,
         "importPath": "problems.base",
         "description": "problems.base",
-        "peekOfCode": "class Problem:\n    def __init__(self,initial_state, goal_state):\n        self.initial_state = initial_state\n        self.goal_state = goal_state\n    @abstractmethod\n    def actions(self, state):\n        \"\"\"\n        Return the list of actions that can be executed in the given state.\n        \"\"\"\n        pass",
+        "peekOfCode": "class Problem:\n    def __init__(self,initial_state, goal_state):\n        self.initial_state = initial_state\n        self.goal_state = goal_state\n    @abstractmethod\n    def __repr__(self):\n        pass\n    @abstractmethod\n    def actions(self, state):\n        \"\"\"",
         "detail": "problems.base",
         "documentation": {}
     },
@@ -334,7 +350,7 @@
         "kind": 6,
         "importPath": "problems.EightPuzzle",
         "description": "problems.EightPuzzle",
-        "peekOfCode": "class EightPuzzle(Problem):\n    \"\"\"\n    Problem: Eight Puzzle\n    Returns: List of states from initial to goal.\n    \"\"\"\n    def __init__(self,initial_state, goal_state=Node([[1,2,3], [4,5,6], [7,8,0]],0,0, None)):\n        super().__init__(Node(initial_state,0,0,None), goal_state)\n        self.width = 3\n    def __repr__(self):\n        return \"------Eight Puzzle problem------\"",
+        "peekOfCode": "class EightPuzzle(Problem):\n    \"\"\"\n    Problem: Eight Puzzle\n    Returns: List of states from initial to goal.\n    \"\"\"\n    def __init__(self,initial_state, goal_state=Node([[1,2,3], [4,5,6], [7,8,0]],0,0, None)):\n        super().__init__(Node(initial_state,0,0,None), goal_state)\n        self.width = 3\n    def __repr__(self):\n        return \"Eight Puzzle problem\"",
         "detail": "problems.EightPuzzle",
         "documentation": {}
     },
@@ -343,7 +359,7 @@
         "kind": 6,
         "importPath": "problems.WolfGoatCabbage",
         "description": "problems.WolfGoatCabbage",
-        "peekOfCode": "class WolfGoatCabbage(Problem):\n    \"\"\" The problem of a farmer, trying to cross a river with his wolf, goat and cabbage\n    with the use of a row boat that only fits the farmer and 1 item. If the wolf is ever left\n    alone with the goat, it will eat it. If the goat is left with the cabbage, it will eat it.\n    The problem is seperated in two sets, left and right, to illustrate the left and right bank of the river.\n    \"\"\"\n    def __init__(self, initial_state, goal_state=Node((sorted(tuple()),sorted(tuple({\"Cabbage\", \"Farmer\",\"Goat\",\"Wolf\"}))))):\n        super().__init__(Node(initial_state), goal_state)\n    def __repr__(self):\n        return \"------Wolf Goat Cabbage problem------\"",
+        "peekOfCode": "class WolfGoatCabbage(Problem):\n    \"\"\" The problem of a farmer, trying to cross a river with his wolf, goat and cabbage\n    with the use of a row boat that only fits the farmer and 1 item. If the wolf is ever left\n    alone with the goat, it will eat it. If the goat is left with the cabbage, it will eat it.\n    The problem is seperated in two sets, left and right, to illustrate the left and right bank of the river.\n    \"\"\"\n    def __init__(self, \n                 initial_state=Node((sorted(tuple({\"Cabbage\", \"Farmer\",\"Goat\",\"Wolf\"})),sorted(tuple()))), \n                 goal_state=Node((sorted(tuple()),sorted(tuple({\"Cabbage\", \"Farmer\",\"Goat\",\"Wolf\"}))))):\n        super().__init__(initial_state, goal_state)",
         "detail": "problems.WolfGoatCabbage",
         "documentation": {}
     },
@@ -379,7 +395,7 @@
         "kind": 6,
         "importPath": "controller",
         "description": "controller",
-        "peekOfCode": "class AppController: \n    def __init__(self):\n        self.view = GUI(self)\n        self.algorithm = None\n        self.problem = None\n        self.game_on = False\n        self.view.create_main_frames()\n        self.view.create_dropbox()\n        self.view.create_buttons()\n    def run(self):",
+        "peekOfCode": "class AppController: \n    def __init__(self):\n        self.view = GUI(self)\n        self.algorithm = None\n        self.problem = None\n        self.game_on = False\n        self.moveable_objects = None\n    def init_start_up(self):    \n        self.view.create_main_frames()\n        self.view.create_dropbox()",
         "detail": "controller",
         "documentation": {}
     },
@@ -393,11 +409,20 @@
         "documentation": {}
     },
     {
-        "label": "theme_path",
+        "label": "script_dir",
         "kind": 5,
         "importPath": "gui",
         "description": "gui",
-        "peekOfCode": "theme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(\"dark-blue\")\nclass GUI(CTk):\n    def __init__(self, controller):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__()\n        self.controller = controller\n        self.geometry(\"1000x800\")",
+        "peekOfCode": "script_dir = os.path.dirname(__file__)\nbg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\nclass GUI(CTk):\n    def __init__(self, controller):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__()\n        self.controller = controller\n        self.geometry(\"1000x800\")",
+        "detail": "gui",
+        "documentation": {}
+    },
+    {
+        "label": "bg_wcg_image_path",
+        "kind": 5,
+        "importPath": "gui",
+        "description": "gui",
+        "peekOfCode": "bg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\nclass GUI(CTk):\n    def __init__(self, controller):\n        \"\"\"\n        Initializing window\n        \"\"\"\n        super().__init__()\n        self.controller = controller\n        self.geometry(\"1000x800\")\n        self.title(\"Search Algorithms Visualizer\")",
         "detail": "gui",
         "documentation": {}
     },
@@ -460,7 +485,7 @@
         "kind": 2,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "def main():\n    app = AppController()\n    app.run()\nif __name__ == '__main__':\n    main() \n        # \"\"\"\"\n#         DISPLAY FRAME: Displaying results and ... stuff?\n#         \"\"\"\n#         # initialize a banner frame\n#         banner_frame = CTkFrame(display_frame)",
+        "peekOfCode": "def main():\n    app = AppController()\n    app.init_start_up()\n    app.run()\nif __name__ == '__main__':\n    main() \n        # \"\"\"\"\n#         self.solution_representation = []\n#         \"\"\"\n#         LEFT FRAME: Radio buttons",
         "detail": "main",
         "documentation": {}
     }
