@@ -395,7 +395,7 @@
         "kind": 6,
         "importPath": "controller",
         "description": "controller",
-        "peekOfCode": "class AppController: \n    def __init__(self):\n        self.view = GUI(self)\n        self.algorithm = None\n        self.problem = None\n        self.game_on = False\n        self.moveable_objects = None\n    def init_start_up(self):    \n        self.view.create_main_frames()\n        self.view.create_dropbox()",
+        "peekOfCode": "class AppController: \n    def __init__(self):\n        self.view = GUI(self)\n        self.algorithm = None\n        self.problem = None\n        self.game_on = False\n        self.moveable_entities = None\n    def init_start_up(self):    \n        self.view.create_main_frames()\n        self.view.create_dropbox()",
         "detail": "controller",
         "documentation": {}
     },
@@ -458,7 +458,7 @@
         "kind": 5,
         "importPath": "gui_test",
         "description": "gui_test",
-        "peekOfCode": "script_dir = os.path.dirname(__file__)\nbg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\ntheme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():",
+        "peekOfCode": "script_dir = os.path.dirname(__file__)\nbg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\n# theme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \n# set_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():",
         "detail": "gui_test",
         "documentation": {}
     },
@@ -467,16 +467,7 @@
         "kind": 5,
         "importPath": "gui_test",
         "description": "gui_test",
-        "peekOfCode": "bg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\ntheme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
-        "detail": "gui_test",
-        "documentation": {}
-    },
-    {
-        "label": "theme_path",
-        "kind": 5,
-        "importPath": "gui_test",
-        "description": "gui_test",
-        "peekOfCode": "theme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \nset_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
+        "peekOfCode": "bg_wcg_image_path = os.path.join(script_dir,\"resources\", \"images\", \"bg_wgc.png\")\n# theme_path = os.path.join(\"resources\", \"themes\", \"hades.json\")        \n# set_default_color_theme(theme_path)\ndef main():\n    app = GUI()\n    setup_thread = threading.Thread(target=app.mainloop())\n    setup_thread.start()\n    app.mainloop()\nif __name__ == main():\n    main()",
         "detail": "gui_test",
         "documentation": {}
     },

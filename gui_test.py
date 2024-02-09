@@ -638,17 +638,13 @@ class GUI(CTk):
         """
         Call functions set up problem
         """
-        self.entries = create_board("entries")
-        self.goal_representation = create_board("goal_labels")
-        self.solution_representation = create_board("solution_labels", 50,40)
-        self.solution_action.configure(text="Waiting for input")
-        self.validate_eightpuzzle_input()
+        
 script_dir = os.path.dirname(__file__)
      
 bg_wcg_image_path = os.path.join(script_dir,"resources", "images", "bg_wgc.png")
 
-theme_path = os.path.join("resources", "themes", "hades.json")        
-set_default_color_theme(theme_path)
+# theme_path = os.path.join("resources", "themes", "hades.json")        
+# set_default_color_theme(theme_path)
 
 def main():
     app = GUI()
