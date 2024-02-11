@@ -18,6 +18,8 @@ class Node:
         self.depth = depth
         self.explored = explored
         self.action = action
+        self.visit_list = None
+        self.frontier_order = None
         
     def __repr__(self):
         return f"{self.state}, Goal:{self.gx}, Heuristic:{self.hx}, Parent:{self.parent}"

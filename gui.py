@@ -4,7 +4,6 @@ from problems import *
 from utils import Node
 from PIL import Image
 
-
 # theme_path = os.path.join("resources", "themes", "hades.json")
 set_appearance_mode("Dark")    
 set_default_color_theme("dark-blue")
@@ -34,6 +33,8 @@ class GUI(CTk):
         Sets up the main frames of the application window, including top, result, description, initial state, goal state,
         solution, and loading frames.
         """
+
+
         self.top_frame = CTkFrame(self,corner_radius=0, height=40, width=1000, fg_color="transparent")
         self.top_frame.place(x=0,y=0)
         
@@ -46,28 +47,30 @@ class GUI(CTk):
         self.description_text = CTkLabel(self.description_frame, text="", fg_color="transparent", font=(None, 16))
         self.description_text.place(relx=0.5, rely=0.5, anchor=CENTER)
         
-        self.initial_frame = CTkFrame(self, corner_radius=20, bg_color="transparent", height=300, width=500, border_width=2, border_color="grey10")
-        self.initial_frame.place(x=0,y=160 , bordermode="inside")
+        self.problem_board = CTkFrame(self, corner_radius=0, height=600, width=1000, fg_color="transparent", bg_color="transparent" )
+        self.problem_board.place(x=0,y=160 , bordermode="inside")
         
-        self.goal_frame = CTkFrame(self, corner_radius=20, bg_color="transparent",  height=300, width=500, border_width=2, border_color="grey10")
-        self.goal_frame.place(x=0,y=460, bordermode="inside")
-        
-        self.solution_frame = CTkFrame(self, corner_radius=20, bg_color="transparent", height=600, width=500, border_width=2, border_color="grey10")
-        self.solution_frame.place(x=500,y=160, bordermode="inside")
-        
-        self.maze_frame = CTkFrame(self, corner_radius=20, height=600, width=1000, bg_color="transparent", border_width=2, border_color="grey10")
-        self.maze_frame.place(x=0, y=160, bordermode="inside")
-        
-        self.loading_frame = CTkFrame(self, corner_radius=20, height=600, width=1000, bg_color="transparent", border_width=2, border_color="grey10")
-        self.loading_frame.place(x=0, y=160, bordermode="inside")
-        self.loading_frame.lower()
-        self.maze_frame.lower()
-
         self.description_text.configure(text="Welcome to the Search Algorithms Visualizer!\n"
                                              "Get started by selecting a problem from the top menu and an algorithm of your choice\n"
                                              "and watch as the solution unfolds step by step.\n"
                                              "Happy exploring!", font=(None, 14))
 
+    def init_problem_board(self):
+        if self.controller.problem == EightPuzzle or self.controller.problem == WolfGoatCabbage:
+            self.initial_frame = CTkFrame(self.problem_board, corner_radius=20, bg_color="transparent", height=300, width=500, border_width=2, border_color="grey10")
+            self.initial_frame.place(x=0,y=0 , bordermode="inside")
+            
+            self.goal_frame = CTkFrame(self.problem_board, corner_radius=20, bg_color="transparent",  height=300, width=500, border_width=2, border_color="grey10")
+            self.goal_frame.place(x=0,y=300, bordermode="inside")
+            
+            self.solution_frame = CTkFrame(self.problem_board, corner_radius=20, bg_color="transparent", height=600, width=500, border_width=2, border_color="grey10")
+            self.solution_frame.place(x=500,y=0, bordermode="inside")
+        elif self.controller.problem == Maze:
+            self.maze_frame = CTkFrame(self.problem_board, corner_radius=20, height=600, width=1000, bg_color="transparent", border_width=2, border_color="grey10")
+            self.maze_frame.place(x=0, y=0, bordermode="inside")
+            self.maze_representation = self.create_board_maze(self.controller.maze)
+
+        
     def update_description(self, problem):
         """
         Updates the description text based on the selected problem.
@@ -86,7 +89,14 @@ class GUI(CTk):
                                                   "Type in integers between 0-8 (0 representing the empty tile)."
                                                   "\nIt will auto place the last three digits to be solvable.\n"
                                                   "Press solve to see magic.")
-    
+        if problem == Maze:
+            self.description_text.configure(text="The Maze Problem.\n"
+                                          "Navigate through the maze from the start 'S' to the goal 'G'.\n"
+                                          "Walls are indicated by black cells, and the path can be traversed through white cells.\n"
+                                          "Experiment with different search algorithms to see how they solve the maze.\n"
+                                          "Each algorithm may take a different path or require more or less time to find the solution.\n"
+                                          "The maze is preloaded. Future updates may include interactive maze creation or selection.")
+
     def setup_algorithm_dropdown(self):
         """
         Creates and configures a dropdown menu for selecting the search algorithm.
@@ -240,6 +250,7 @@ class GUI(CTk):
         Args:
             frames (list): A list of frame names to be initialized and set up.
         """
+        self.init_states()
         for frame in frames:
             parent_frame = getattr(self, frame)
             if frame != "solution_frame":
@@ -258,12 +269,57 @@ class GUI(CTk):
         Args:
             frames (list): A list of frame names to be initialized for the puzzle setup.
         """
+        self.init_states()
         for frame in frames:
             parent_frame = getattr(self, frame)
             self.lift(parent_frame)
         self.entries = self.create_board_eightpuzzle("entries")
         self.goal_representation = self.create_board_eightpuzzle("goal_labels")
         self.controller.validate_eightpuzzle_input()
+        
+    def init_frames_maze(self):   
+        """
+        Initializes frames for the Eight Puzzle problem, creating entry fields for the initial state, 
+        labels for the goal state, and preparing the solution visualization.
+
+        Args:
+            frames (list): A list of frame names to be initialized for the puzzle setup.
+        """
+
+        self.result_of_solution = CTkLabel(self.maze_frame, text="", corner_radius=10, font=("Consolas", 16), height=40,width=250)
+        self.result_of_solution.place(relx=0.82, rely=0.88, anchor="center")
+    
+    def create_board_maze(self, maze):
+        widgets = {}
+        index = 0
+        y = 0.1
+        colors = {"start":"#3a7ebf",
+                 "goal":"green",
+                 "obstacle":"black"}
+        letter = {"start":"S",
+                  "goal":"G"}
+        for i in range(10):
+            x = 0.05
+            for j in range(14):
+                if i == 0 and j == 0:
+                    text = letter["start"] 
+                    color = colors["start"]
+                elif i == 9 and j == 13:
+                    color = colors["goal"]
+                    text = letter["goal"] 
+                elif maze[i][j] == "#":
+                    text = ""
+                    color = colors["obstacle"]
+                else:
+                    color = "grey10"
+                    text = ""
+                new_widget = CTkLabel(self.maze_frame, text=text,width=40, height=40, font=(None, 40), fg_color=color, corner_radius=2)
+                new_widget.place(relx=x, rely=y, anchor="center") # Added logic to make the board nice and neat
+                widgets[(i, j)] = new_widget
+                x += 0.045
+                index += 1
+            y += 0.09
+        return widgets
     
     def create_board_eightpuzzle(self, type="", widget_size=30, font_size=20):
         """
@@ -296,7 +352,7 @@ class GUI(CTk):
             yloc_solution += 0.15            
         return widget_list
     
-    def solution_board_eightpuzzle(self):
+    def solution_board_eightpuzzle(self, array):
         """
         Creates and places labels for the Eight Puzzle solution board, mapping each number to a widget.
 
@@ -309,9 +365,9 @@ class GUI(CTk):
         for i in range(3):
             x = 0.35
             for j in range(3):
-                number = self.controller.array[index]
-                if index != self.controller.array.index(0):
-                    new_widget = CTkLabel(self.solution_frame, text=self.controller.array[index], width=50, height=50, font=(None, 40), fg_color="grey10", corner_radius=5)
+                number = array[index]
+                if index != array.index(0):
+                    new_widget = CTkLabel(self.solution_frame, text=array[index], width=50, height=50, font=(None, 40), fg_color="grey10", corner_radius=5)
                     new_widget.place(relx=x, rely=y, anchor="center") # Added logic to make the board nice and neat
                     widgets[number] = new_widget
                 x += 0.15

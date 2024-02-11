@@ -2,8 +2,9 @@
 
 from itertools import permutations
 from gui import GUI
-from problems import WolfGoatCabbage, EightPuzzle
+from problems import WolfGoatCabbage, EightPuzzle, Maze
 from algorithms import Search_Algorithms
+from utils import *
 
 class AppController:
     """
@@ -24,7 +25,8 @@ class AppController:
         self.problem = None
         self.game_on = False
         self.moveable_entities = None
-    
+        self.maze = maze_one
+        
     """
     initializaion
     """
@@ -33,7 +35,7 @@ class AppController:
         Initiates the main application loop, starting the GUI event listening loop.
         """
         self.view.mainloop()
-    
+        
     def setup_initial_gui_state(self): 
         """
         Sets up the initial state of the GUI by creating main frames, dropdowns, and buttons.
@@ -67,13 +69,15 @@ class AppController:
         """
         Prepares the base GUI state for problem visualization by resetting frames, destroying moveable entities, and initializing state descriptions.
         """
-        self.reset_frames()
-        self.destroy_moveable_enties()
-        self.view.init_states()
-        self.show_loading_screen()
-        self.view.update_description(self.problem)
-
-
+        if self.problem == WolfGoatCabbage or self.problem == EightPuzzle:
+            self.reset_frames()
+            self.view.init_states()
+            self.show_loading_screen()
+        if self.problem == Maze:
+            self.reset_frames()
+            self.view.init_frames_maze()
+            self.show_loading_screen()
+            
     """
     Problem Selection Handlers
     """
@@ -83,7 +87,7 @@ class AppController:
         Prepares the GUI for this specific problem and loads its description.
         """
         self.problem = WolfGoatCabbage
-        self.prepare_problem_base_state()
+        self.view.init_problem_board()
         self.view.init_frames_wsg(["initial_frame","solution_frame","goal_frame"])
         self.view.update_description(self.problem)
 
@@ -92,14 +96,17 @@ class AppController:
         Handler for when the Eight Puzzle problem is selected.
         Prepares the GUI for this specific problem, resets number entries, and initializes the problem's frames.
         """
-        self.numbers_left = [0,1,2,3,4,5,6,7,8]
-        self.numbers_entered = []
-        self.prepare_problem_base_state()
         self.problem = EightPuzzle
+        self.view.init_problem_board()
         self.view.init_frames_eightpuzzle(["initial_frame","solution_frame","goal_frame"])
+        self.view.update_description(self.problem)
+        self.numbers_entered = []
+        self.numbers_left = [0,1,2,3,4,5,6,7,8]
 
     def on_maze_selected(self):
-        pass
+        self.problem = Maze
+        self.view.init_problem_board()
+        self.view.init_frames_maze()        
     
     def on_eightqueens_selected(self):
         pass
@@ -128,11 +135,12 @@ class AppController:
         """
         Flattens the matrix of user entries for the Eight Puzzle into a single list (array) for easy processing.
         """
-        self.array = []
+        array = []
         for obj in self.view.entries:
             for entry in obj:
                 number = entry.get()
-                self.array.append(int(number))
+                array.append(int(number))
+        return array
     
     def get_search_results(self):
         """
@@ -143,11 +151,14 @@ class AppController:
         """
         if self.problem == EightPuzzle:
             matrix = self.convert_entries_to_matrix()
-            self.flatten_matrix_to_array()
+            array = self.flatten_matrix_to_array()
             problem = self.problem(matrix)
-            self.solution_representation = self.view.solution_board_eightpuzzle()
-        else:    
+            self.moveable_entities = self.view.solution_board_eightpuzzle(array)
+        elif self.problem == WolfGoatCabbage:    
             problem = self.problem()
+        elif self.problem == Maze:
+            problem = self.problem()
+            problem.maze = maze_one
             
         solver = Search_Algorithms(problem)
         algorithm = getattr(solver, self.algorithm, None)
@@ -165,19 +176,24 @@ class AppController:
         if self.algorithm is None:
             self.view.display_error_message("Choose algorithm first")
             return
-        self.text_size = 10
+        self.text_size = 10 if self.problem == WolfGoatCabbage else 20
         self.game_on = True
-
+            
         actions, solution, result = self.get_search_results()
-        self.view.after(5, lambda: self.view.result_of_solution.configure(text=f"Path Length: {len(solution)-1}\n"
-                                                                               f"Nodes Explored: {result.explored}"))
-        
+
         if self.problem == WolfGoatCabbage:
+            self.view.after(5, lambda: self.view.result_of_solution.configure(text=f"Path Length: {len(solution)}\n"
+                                                                                    f"Nodes Explored: {result.explored}"))
             actions.append(("", {None,"Finished"}))
             self.view.after(1000, lambda: self.animate_solution_wgc(solution, actions))
         elif self.problem == EightPuzzle:
+            self.view.after(5, lambda: self.view.result_of_solution.configure(text=f"Path Length: {len(solution)}\n"
+                                                                                    f"Nodes Explored: {result.explored}"))
             actions.append("SUCCESS")
-            self.view.after(1000, lambda: self.animate_solution_eightpuzzle(solution, actions, 0))
+            self.view.after(1000, lambda: self.animate_solution_eightpuzzle(solution, actions))
+        elif self.problem == Maze:
+            solution.reverse()
+            self.view.after(1000, lambda: self.animate_path_maze(result, solution, actions))
 
     """
     GUI State Management
@@ -186,25 +202,31 @@ class AppController:
         """
         Resets the current problem visualization to its initial state, clearing any moveable entities or selections made.
         """
+        self.game_on = False
         if self.problem == WolfGoatCabbage:
-            self.view.solution_frame = self.view.setup_board_wsg("solution frame", self.view.solution_frame)
+            for widget  in self.moveable_entities:
+                widget.destroy()
+            self.view.after(500, lambda: self.view.init_frames_wsg(["solution_frame"]))
         if self.problem == EightPuzzle:
+            for widget in self.moveable_entities.values():
+                widget.destroy()
             self.view.init_frames_eightpuzzle(["solution_frame"])
             self.numbers_left = [1,2,3,4,5,6,7,8,0]
             self.numbers_entered = []
+        if self.problem == Maze:
+            self.view.maze_frame.destroy()
+            self.view.init_problem_board()
+            self.view.init_frames_maze()
             
-        self.game_on = False
+            return
+        self.view.solution_action.configure(text="")
+        self.view.result_of_solution.configure(text="")
 
-    def reset_frames(self):
+    def reset_frames(self, frame=None):
         """
         Clears all widgets from the main frames (initial, goal, and solution frames) in preparation for a new problem or reset.
         """
-        for widget in self.view.initial_frame.winfo_children():
-            widget.destroy()
-        for widget in self.view.goal_frame.winfo_children():
-            widget.destroy()
-        for widget in self.view.solution_frame.winfo_children():
-            widget.destroy()
+        for widget in self.view.problem_board.winfo_children(): widget.destroy()
         self.game_on = False
         
     def show_loading_screen(self):
@@ -249,6 +271,8 @@ class AppController:
             direction (str): The direction in which to move the character ("Left" or other implies "Right").
             x (float): The starting relative x-position of the character widget.
         """
+        if not self.game_on:
+            return
         if direction == "Left":
             if x > 0.20:
                 x -= 0.005
@@ -322,7 +346,7 @@ class AppController:
         """
         if action == "SUCCESS":
             return
-        tile = self.solution_representation[action[0]]
+        tile = self.moveable_entities[action[0]]
         placement_info = tile.place_info()
         new_x = float(placement_info.get("relx", 0))
         new_y = float(placement_info.get("rely", 0))
@@ -363,10 +387,77 @@ class AppController:
                 self.view.solution_action.configure(text=f"{tile} {move}")
             else:
                 self.view.solution_action.configure(text=f"SUCCESS")
-            self.expand_text(action, 20, 40) # expand_text action effect
-            self.text_size = 15
+            self.expand_text(action, 20, 35) # expand_text action effect
+            self.text_size = 20
 
         self.view.after(time, lambda : self.animate_solution_eightpuzzle(solution, actions, step_index+1)) # Iterate through solution
+
+    def animate_path_maze(self, result, solution, actions, step_index=0):
+        """      
+        Animates the solution steps for the Wolf, Goat, and Cabbage problem.     
+
+        Args:
+            solution (list): The sequence of states from the initial to the goal state.
+            actions (list): The actions taken to move from one state to the next.
+            step_index (int, optional): The current step in the animation sequence. Defaults to 0.
+        """
+        if not self.game_on:
+            return
+        time = 150
+        self.view.result_of_solution.configure(text=f"Nodes Explored: {step_index}\n"
+                                                    f"Path Length: {0}")
+        if result.visit_list:
+            loc = result.visit_list.pop(0)
+        else:
+            nodes_explored = step_index
+            self.view.after(500, lambda: self.animate_solution_maze(solution, result, solution_step=0, step_index=nodes_explored))
+            return
+
+        if (loc) in result.frontier_order:
+            self.colour_change_frontier(self.view.maze_representation[(loc)], 0)
+        else:
+            self.colour_change_explored(self.view.maze_representation[(loc)], 0)
+
+        self.view.after(time, lambda : self.animate_path_maze(result,solution, actions, step_index+1)) # Iterate through solution
+    
+    def colour_change_solution(self, tile, index):
+        if not self.game_on:
+            return
+        shades = ["grey10","grey18","grey26","grey34","grey42","grey50","grey58","grey66","grey74","grey82","grey92"]
+        if index < 10:
+            tile.configure(text_color="#3471ac", fg_color=shades[index])
+            self.view.after(50, lambda : self.colour_change_solution(tile, index+1))
+    
+    def colour_change_explored(self, tile, index):
+        if not self.game_on:
+            return
+        shades = ['#2e6599','#25517a','#1e4162','#18344e','#13293f','#0f2132','#0c1a28','#0a1520','#08111a','#060e15']
+        if index < 10:
+            tile.configure(fg_color=shades[index])
+            self.view.after(50, lambda : self.colour_change_explored(tile,index+1))
+            
+    def colour_change_frontier(self, tile, index):
+        if not self.game_on:
+            return
+        shades = ['#142c43','#16314a','#193652','#1c3c5b','#1f4366','#224a71','#26537d','#2a5c8b','#2f669b','#3471ac']
+        if index < 10:
+            tile.configure(fg_color=shades[index])
+            self.view.after(50, lambda : self.colour_change_frontier(tile,index+1))
+
+    def animate_solution_maze(self, solution,result,solution_step,step_index):
+        if not self.game_on:
+            return
+        time = 50 # Set time 1000ms, unless Depth First Search
+        if solution:
+           loc = solution.pop(0)
+           x,y = loc
+           x,y = int(x),int(y)
+        else:
+            return
+        self.view.result_of_solution.configure(text=f"Nodes Explored: {step_index}\n"
+                                                    f"Path Length: {solution_step}")
+        self.colour_change_solution(self.view.maze_representation[(x,y)], 0)
+        self.view.after(time, lambda : self.animate_solution_maze(solution,result,solution_step+1,step_index)) # Iterate through solution
 
     """
     Validation and Helpers
@@ -379,7 +470,6 @@ class AppController:
         """
         for i, row_entries in enumerate(self.view.entries):
             for j, entry in enumerate(row_entries):
-                # Use a closure to capture i and j correctly
                 def make_validate_command(i=i, j=j):
                     return self.view.register(lambda P, i=i, j=j: self.callback(P, i, j)), "%P"
                 validate_cmd = make_validate_command(i, j)

@@ -57,3 +57,6 @@ class Problem:
             final_state = final_state.parent
         actions.reverse()
         return actions
+    
+    def format_state(self, state):
+        return tuple(map(tuple, state))
