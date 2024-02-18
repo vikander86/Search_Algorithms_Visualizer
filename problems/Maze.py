@@ -11,7 +11,7 @@ class Maze(Problem):
 
     Returns: List of states from initial to goal.
     """
-    def __init__(self,initial_state=Node(tuple(["0","0"])), goal_state=Node(tuple(["9","13"])),size_x=10, size_y=14):
+    def __init__(self,initial_state=Node(tuple(["0","0"])), goal_state=Node(tuple(["29","29"])),size_x=30, size_y=30):
         super().__init__(initial_state,goal_state)
         self.maze = []
         self.size_x = size_x
@@ -85,8 +85,7 @@ class Maze(Problem):
         """
         heuristic_cost = 0
         x,y = state
-        x,y = int(x),int(y)
-        heuristic_cost += abs(9 - x) + abs(13 - y)       
+        heuristic_cost += abs(29 - int(x)) + abs(29 - int(y))    
         return heuristic_cost
     
     def format_state(self, state):

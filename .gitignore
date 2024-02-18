@@ -12,3 +12,4 @@ myenv/
 python_files/__pycache__/
 python_files/tempCodeRunnerFile.py
 source.txt
+**/._old_gui_test.py
